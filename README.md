@@ -65,6 +65,8 @@ classDiagram
     Room : -left
     Room : -forward
     Room : -back
+    Room : -visit_status
+    Room : -description
     Room : +go_right()
     Room : +go_forward()
     Room : +go_left()
@@ -83,7 +85,7 @@ classDiagram
 ```
 ```mermaid
 classDiagram
-    Map : -head
+    Map : -start
     Map : +get_map()
     Map : +update_map()
 ```
@@ -93,6 +95,9 @@ classDiagram
     Entity <|-- Enemy
     Entity : -hp
     Entity : -atk
+    Entity : -name
+    Entity : -description
+    Entity : +display_stats()
     Player : -inventory
     Player : +open_inventory()
     Player : +calculate_atk()
