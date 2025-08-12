@@ -65,6 +65,8 @@ classDiagram
     Room : +right()
     Room : +forward()
     Room : +left()
+    Room : +back()
+    Treasure : =items
 ```
 ```mermaid
 classDiagram
