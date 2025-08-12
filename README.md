@@ -16,7 +16,7 @@
 
 ## Project Structure
 
-```
+```lua
 .
 ├── README.md
 ├── main.py (we might end up with a Game class too? --> this was from the template so see how)
