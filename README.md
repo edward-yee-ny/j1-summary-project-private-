@@ -72,7 +72,7 @@ classDiagram
 ```mermaid
 classDiagram
     Entity <|-- Player
-    Entity <|-- Monster
+    Entity <|-- Enemy
     Entity : -health
     Entity : -attack
     Player : -inventory
