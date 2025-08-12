@@ -59,9 +59,9 @@ VVVV We should prob class diagram that stuff gang VVVV
 pls change when decided on whether stats should be a separate class or just internal attribute
 ```mermaid
 classDiagram
-    Room <|-- Treasure
-    Room <|-- Battle
-    Room <|-- Boss
+    Room <|-- TreasureRoom
+    Room <|-- BattleRoom
+    Room <|-- BossRoom
     Room : -right
     Room : -left
     Room : -forward
@@ -70,7 +70,7 @@ classDiagram
     Room : +go_forward()
     Room : +go_left()
     Room : +go_back()
-    Treasure : -items
+    Treasure : -item
 ```
 ```mermaid
 classDiagram
@@ -114,6 +114,7 @@ Choose your option: <choice>
 - You are able to utilise weapons and weapons provide additional damage (maybe additional effects)
 - You will also be able to use your inventory
 - Using your inventory will not count toward ending your turn, and you can only use items when it is your turn
+- HP resets with each match 
 
 # Footnote
 
