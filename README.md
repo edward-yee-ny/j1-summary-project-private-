@@ -25,7 +25,7 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ├── main.py (we might end up with a Game class too? --> this was from the template so see how)
 ├── mud.py
 ├── environment
-├───── map.py (linkedlist using room's child classes)
+├───── map.py (linkedlist using room's child classes) --> use ascii to show which room player is at (use a 2d array and hardcode the entire map, find exact cooridinates and display on map)
 ├───── room.py
 ├───── treasure.py (inherit from room)
 ├───── battle.py (inherit from room)
