@@ -63,15 +63,13 @@ classDiagram
     Room : +forward()
     Room : +left()
 ```
-```
-mermaid
+```mermaid
 classDiagram
     Map : -head
     Map : +get_map()
     Map : +update_map()
 ```
-```
-mermaid
+```mermaid
 classDiagram
     Entity <|-- Player
     Entity <|-- Monster
