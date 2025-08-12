@@ -70,14 +70,15 @@ classDiagram
     Map : +get_map()
     Map : +update_map()
 ```
-```mermaid
-classDiagram
-    Player : -inventory
-    Player : +check_inventory()
 ```
-```mermaid
+mermaid
 classDiagram
-    Monster : -stats???
+    Entity <|-- Player
+    Entity <|-- Monster
+    Entity : -health
+    Entity : -attack
+    Player : -inventory
+    Player : +open_inventory()
 ```
 
 ## Gameplay
