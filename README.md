@@ -62,11 +62,15 @@ classDiagram
     Room <|-- Treasure
     Room <|-- Battle
     Room <|-- Boss
-    Room : +right()
-    Room : +forward()
-    Room : +left()
-    Room : +back()
-    Treasure : =items
+    Room : -right
+    Room : -left
+    Room : -forward
+    Room : -back
+    Room : +go_right()
+    Room : +go_forward()
+    Room : +go_left()
+    Room : +go_back()
+    Treasure : -items
 ```
 ```mermaid
 classDiagram
