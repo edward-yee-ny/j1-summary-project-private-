@@ -1,6 +1,6 @@
 # 2025-summary-project
 
-- This is a simple MUD game about exploring a dungeon hunting rascal (or mega knight) Data designer DO YOUR JOB NOW 😡😡😡😡😡😡
+- This is a simple MUD game about exploring a dungeon as mega knight
 
 ## About
 
