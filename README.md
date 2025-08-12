@@ -59,10 +59,16 @@ classDiagram
     Room <|-- Treasure
     Room <|-- Battle
     Room <|-- Boss
-    Room <|-- Map
     Room : +right()
     Room : +forward()
     Room : +left()
+```
+```
+mermaid
+classDiagram
+    Map : -head
+    Map : +get_map()
+    Map : +update_map()
 ```
 ```mermaid
 classDiagram
