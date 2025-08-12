@@ -61,7 +61,6 @@ pls change when decided on whether stats should be a separate class or just inte
 classDiagram
     Room <|-- TreasureRoom
     Room <|-- BattleRoom
-    Room <|-- BossRoom
     Room : -right
     Room : -left
     Room : -forward
@@ -70,8 +69,15 @@ classDiagram
     Room : +go_forward()
     Room : +go_left()
     Room : +go_back()
+    Room : +display()
     TreasureRoom : -items
     TreasureRoom : +get_item()
+    BattleRoom : -enemy
+    BattleRoom : -battle_type
+    BattleRoom : -reward
+    BattleRoom : +display_room()
+    BattleRoom : +get_reward()
+    BattleRoom : +get_attack()
     
 ```
 ```mermaid
