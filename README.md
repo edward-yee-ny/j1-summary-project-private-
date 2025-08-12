@@ -71,7 +71,7 @@ classDiagram
     Room : +go_left()
     Room : +go_back()
     TreasureRoom : -items
-    TreasureRoom : +get_item
+    TreasureRoom : +get_item()
     
 ```
 ```mermaid
