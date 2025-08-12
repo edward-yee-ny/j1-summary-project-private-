@@ -70,7 +70,7 @@ classDiagram
     Room : +go_forward()
     Room : +go_left()
     Room : +go_back()
-    Treasure : -item
+    TreasureRoom : -item
 ```
 ```mermaid
 classDiagram
