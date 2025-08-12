@@ -1,12 +1,19 @@
 class Room:
     def __init__(self):
+        self.right = None
+        self.left = None
+        self.forward = None
+        self.back = None
         pass
     
-    def right(self):
+    def go_right(self):
         pass
     
-    def left(self):
+    def go_left(self):
         pass
     
-    def forward(self):
+    def go_forward(self):
+        pass
+    
+    def go_back(self):
         pass
