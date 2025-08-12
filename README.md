@@ -72,6 +72,7 @@ classDiagram
     Room : +display()
     TreasureRoom : -items
     TreasureRoom : +get_item()
+    TreasureRoom : +display_room()
     BattleRoom : -enemy
     BattleRoom : -battle_type
     BattleRoom : -reward
@@ -90,10 +91,16 @@ classDiagram
 classDiagram
     Entity <|-- Player
     Entity <|-- Enemy
-    Entity : -health
-    Entity : -attack
+    Entity : -hp
+    Entity : -atk
     Player : -inventory
     Player : +open_inventory()
+    Player : +calculate_atk()
+    Player : + update_weapon()
+    Player : + update_hp()
+    Enemy : -enemy_type
+    Enemy : -atk_type
+    Enemy : +update_hp()
 ```
 
 ## Gameplay
