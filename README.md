@@ -136,6 +136,43 @@ Choose your option: <choice>
 - Using your inventory will not count toward ending your turn, and you can only use items when it is your turn
 - HP resets with each match 
 
+### Enemies
+#### Elite enemies 
+P.E.K.K.A
+hp: 3000
+atk: 500 
+
+Sparky 
+hp:2500
+atk: 600
+
+Boss_Bandit 
+hp:2750
+atk: 550 
+
+Giant_Skeleton 
+hp: 3000
+atk: 350 
+
+#### Basic enemies 
+Knight 
+hp: 2000 
+atk: 200
+
+Musketeer 
+hp: 900
+atk: 300
+
+Valkryie 
+hp: 1600
+atk: 250
+
+Baby_dragon 
+hp: 1300
+atk: 250
+
+
+
 # Footnote
 
 This is a J1 Summary Project. Names, characters, businesses, places, events and incidents are either the products of the author’s imagination or used in a fictitious manner. Any resemblance to actual persons, living or dead, or actual events is purely coincidental. Apologies to those who feel distress due to unintentional fate alignment.
