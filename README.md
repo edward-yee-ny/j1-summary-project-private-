@@ -98,14 +98,14 @@ classDiagram
     Entity : -name
     Entity : -description
     Entity : +display_stats()
+    Entity : +update_hp()
     Player : -inventory
     Player : +open_inventory()
+    Player : +update_inventory()
     Player : +calculate_atk()
     Player : + update_weapon()
-    Player : + update_hp()
     Enemy : -enemy_type
     Enemy : -atk_type
-    Enemy : +update_hp()
 ```
 
 ## Gameplay
