@@ -100,6 +100,7 @@ classDiagram
     Entity : +display_stats()
     Entity : +update_hp()
     Player : -inventory
+    Player : -cur_weapon
     Player : +open_inventory()
     Player : +update_inventory()
     Player : +calculate_atk()
