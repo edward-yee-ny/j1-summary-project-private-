@@ -1,14 +1,11 @@
 from random import random
 from entities.entity import Entity
-from objects.item import Item
-
-ARMOR = 'armor'
-WEAPON = 'weapon'
+from objects.item import Item, ARMOR, WEAPON
 
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self, hp, name, description):
-        super().__init__(1750, None, name, description)
+        super().__init__(hp, None, name, description)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
@@ -35,10 +32,10 @@ class Player(Entity):
         
         return
     
-    def update_equipment(self, type, item: Item):
+    def update_equipment(self, item: Item):
         """Updates the current weapon. ```type``` can either be player.ARMOR or player.WEAPON"""
-        if type == ARMOR:
+        if item.type == ARMOR:
             self.cur_armor = item
-        elif type == WEAPON:
+        elif item.type == WEAPON:
             self.cur_weapon = item
         return
