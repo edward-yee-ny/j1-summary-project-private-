@@ -31,10 +31,7 @@ class Player(Entity):
     
     def calculate_dmg(self, base_dmg):
         """Calculates total damage based on base damage and armor reduction."""
-        if not self.cur_armor:
-            self.hp -= base_dmg
-        else:
-            self.hp -= max(0, base_dmg - self.cur_armor)
+        self.hp -= base_dmg
         
         return
     
