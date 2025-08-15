@@ -8,7 +8,7 @@ WEAPON = 'weapon'
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self, hp, name, description):
-        super().__init__(1750, None, name, description)
+        super().__init__(hp, 100, name, description)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
