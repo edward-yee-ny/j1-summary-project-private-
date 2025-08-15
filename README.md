@@ -73,7 +73,6 @@ classDiagram
     BattleRoom : -reward
     BattleRoom : +display_room()
     BattleRoom : +get_reward()
-    BattleRoom : +get_attack()
     
 ```
 ```mermaid
