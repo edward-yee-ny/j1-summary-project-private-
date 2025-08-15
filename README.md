@@ -37,10 +37,6 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ├── objects
 ├───── item.py
 ├───── inventory.py (potential hashtable, not necessary to overcomplicate though)
-├── tests
-├───── test1.py
-├───── test2.py
-├───── test3.py 
 ├───── ... (not too sure how many things Mr Tester will be needing)
 ├── data
 ├───── save.json
@@ -48,7 +44,10 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ├───── monsters.json 
 ├── helper
 ├───── extract_json.py
-├───── pack_json.py 
+├───── pack_json.py
+├── test1.py
+├── test2.py
+├── test3.py 
 ```
 (subjected to change)
 
@@ -106,12 +105,12 @@ classDiagram
     Player : +calculate_dmg()
     Player : +update_equipment()
     Enemy : -enemy_type
-    Enemy : -atk_type
 ```
 ```mermaid
 classDiagram
     Item : -hp
     Item : -atk
+    Item : -name
     Item : +display_stats()
 ```
 
