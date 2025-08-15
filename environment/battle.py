@@ -1,4 +1,4 @@
-from room import Room
+from .room import Room
 
 class BattleRoom(Room):
     def __init__(self):
@@ -10,11 +10,12 @@ class BattleRoom(Room):
         
     def display(self):
         super().display()
+        print(f"Enemy: {self.enemy}")
+        print(f"Battle Type: {self.battle_type}")
+        print(f"Reward: {self.reward}")
     
     def get_reward(self):
-        pass
+        return self.reward if self.reward else "No reward available."
     
-    def get_attack(self):
-        pass
         
         
