@@ -110,6 +110,7 @@ classDiagram
 classDiagram
     Item : -hp
     Item : -atk
+    Item : -name
     Item : +display_stats()
 ```
 
