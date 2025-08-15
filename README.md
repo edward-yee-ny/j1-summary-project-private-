@@ -101,10 +101,11 @@ classDiagram
     Entity : +update_hp()
     Player : -inventory
     Player : -cur_weapon
+    Player : -cur_armor
     Player : +open_inventory()
     Player : +update_inventory()
     Player : +calculate_atk()
-    Player : + update_weapon()
+    Player : + update_equipment()
     Enemy : -enemy_type
     Enemy : -atk_type
 ```
