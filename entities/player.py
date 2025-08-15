@@ -10,6 +10,14 @@ class Player(Entity):
         self.cur_weapon = None
         self.cur_armor = None
     
+    def reset_hp(self):
+        '''Use this function to reset the Player's HP before each battle.'''
+        self.hp = 1750
+        if self.cur_armor:
+            self.hp += self.cur_armor.hp
+        
+        return
+    
     def open_inventory(self):
         """Prints out the current items stored in a player's inventory."""
         print("Your current items:", " ".join(self.inventory))
@@ -33,9 +41,11 @@ class Player(Entity):
         return self.update_hp(-base_dmg)
     
     def update_equipment(self, item: Item):
-        """Updates the current weapon. ```type``` can either be player.ARMOR or player.WEAPON"""
+        """Updates the equipment."""
         if item.type == ARMOR:
             self.cur_armor = item
         elif item.type == WEAPON:
             self.cur_weapon = item
         return
+    
+Player().reset_hp()

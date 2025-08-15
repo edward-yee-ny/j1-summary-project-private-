@@ -2,6 +2,7 @@ ARMOR = 'armor'
 WEAPON = 'weapon'
 
 class Item:
+    '''An item, possibly a reward or a treasure item.'''
     def __init__(self, hp, atk, name, type):
         self.hp = hp
         self.atk = atk
@@ -16,4 +17,3 @@ HP: {self.hp}
 ATK: {self.atk}
 """)
         return
-    
