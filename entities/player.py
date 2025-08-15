@@ -8,7 +8,7 @@ WEAPON = 'weapon'
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self, hp, name, description):
-        super().__init__(hp, None, name, description)
+        super().__init__(hp=1750, None, name, description)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
@@ -25,6 +25,8 @@ class Player(Entity):
     
     def calculate_atk(self) -> int:
         """Calculates the attack that this Player should deal."""
+        if not self.cur_weapon:
+            return round((1+random()) * 100) # Fist? As if!!
         return round((1+random()) * self.cur_weapon.atk) # WEAPON ATTACK HERE
         
     
