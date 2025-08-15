@@ -67,11 +67,6 @@ classDiagram
     Room : -back
     Room : -visit_status
     Room : -description
-    Room : +go_right()
-    Room : +go_forward()
-    Room : +go_left()
-    Room : +go_back()
-    Room : +display()
     TreasureRoom : -items
     TreasureRoom : +get_item()
     TreasureRoom : +display_room()
@@ -88,6 +83,11 @@ classDiagram
     Map : -start
     Map : +get_map()
     Map : +update_map()
+    Map : +go_right()
+    Map : +go_forward()
+    Map : +go_left()
+    Map : +go_back()
+    Map : +display()
 ```
 ```mermaid
 classDiagram
