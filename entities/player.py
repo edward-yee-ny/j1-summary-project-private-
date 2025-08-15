@@ -28,9 +28,9 @@ class Player(Entity):
     
     def calculate_dmg(self, base_dmg):
         """Calculates total damage based on base damage and armor reduction."""
-        self.hp -= base_dmg
-        
-        return
+        # For now, just use update_hp()... maybe when the game is more complicated,
+        # add something here :)
+        return self.update_hp(-base_dmg)
     
     def update_equipment(self, item: Item):
         """Updates the current weapon. ```type``` can either be player.ARMOR or player.WEAPON"""
