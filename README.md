@@ -105,7 +105,6 @@ classDiagram
     Player : +calculate_dmg()
     Player : +update_equipment()
     Enemy : -enemy_type
-    Enemy : -atk_type
 ```
 ```mermaid
 classDiagram
