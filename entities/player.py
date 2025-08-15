@@ -8,7 +8,7 @@ WEAPON = 'weapon'
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self, hp, name, description):
-        super().__init__(hp=1750, None, name, description)
+        super().__init__(1750, None, name, description)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
@@ -28,7 +28,6 @@ class Player(Entity):
         if not self.cur_weapon:
             return round((1+random()) * 100) # Fist? As if!!
         return round((1+random()) * self.cur_weapon.atk) # WEAPON ATTACK HERE
-        
     
     def calculate_dmg(self, base_dmg):
         """Calculates total damage based on base damage and armor reduction."""
