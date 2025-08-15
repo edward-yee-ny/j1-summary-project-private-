@@ -64,14 +64,8 @@ classDiagram
     Room : -right
     Room : -left
     Room : -forward
-    Room : -back
     Room : -visit_status
     Room : -description
-    Room : +go_right()
-    Room : +go_forward()
-    Room : +go_left()
-    Room : +go_back()
-    Room : +display()
     TreasureRoom : -items
     TreasureRoom : +get_item()
     TreasureRoom : +display_room()
@@ -88,6 +82,10 @@ classDiagram
     Map : -start
     Map : +get_map()
     Map : +update_map()
+    Map : +go_right()
+    Map : +go_forward()
+    Map : +go_left()
+    Map : +display()
 ```
 ```mermaid
 classDiagram
@@ -105,9 +103,16 @@ classDiagram
     Player : +open_inventory()
     Player : +update_inventory()
     Player : +calculate_atk()
-    Player : + update_equipment()
+    Player : +calculate_dmg()
+    Player : +update_equipment()
     Enemy : -enemy_type
     Enemy : -atk_type
+```
+```mermaid
+classDiagram
+    Item : -hp
+    Item : -atk
+    Item : +display_stats()
 ```
 
 ## Gameplay
