@@ -1,0 +1,46 @@
+{
+    "elite_enemies": [
+        {
+            "name": "P.E.K.K.A",
+            "hp": 3000,
+            "atk": 500
+        },
+        {
+            "name": "Sparky",
+            "hp": 2500,
+            "atk": 600
+        },
+        {
+            "name": "Boss_Bandit",
+            "hp": 2750,
+            "atk": 550
+        },
+        {
+            "name": "Giant_Skeleton",
+            "hp": 3000,
+            "atk": 350
+        }
+    ],
+    "basic_enemies": [
+        {
+            "name": "Knight",
+            "hp": 2000,
+            "atk": 200
+        },
+        {
+            "name": "Musketeer",
+            "hp": 900,
+            "atk": 300
+        },
+        {
+            "name": "Valkryie",
+            "hp": 1600,
+            "atk": 250
+        },
+        {
+            "name": "Baby_dragon",
+            "hp": 1300,
+            "atk": 250
+        }
+    ]
+}

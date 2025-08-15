@@ -1,0 +1,25 @@
+{
+    "items": [
+        {
+            "name": "Front armour",
+            "hp": 350
+        },
+        {
+            "name": "Fist reinforcements",
+            "atk": 200
+        },
+        {
+            "name": "Leg armour",
+            "hp": 200,
+            "atk": 100
+        },
+        {
+            "name": "Golden body armour",
+            "hp": 600
+        },
+        {
+            "name": "Mythic spiked fist",
+            "atk": 400
+        }
+    ]
+}
