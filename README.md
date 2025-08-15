@@ -109,6 +109,12 @@ classDiagram
     Enemy : -enemy_type
     Enemy : -atk_type
 ```
+```mermaid
+classDiagram
+    Item : -hp
+    Item : -atk
+    Item : +display_stats()
+```
 
 ## Gameplay
 
