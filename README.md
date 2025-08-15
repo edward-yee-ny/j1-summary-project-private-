@@ -105,7 +105,8 @@ classDiagram
     Player : +open_inventory()
     Player : +update_inventory()
     Player : +calculate_atk()
-    Player : + update_equipment()
+    Player : +calculate_dmg()
+    Player : +update_equipment()
     Enemy : -enemy_type
     Enemy : -atk_type
 ```
