@@ -64,7 +64,6 @@ classDiagram
     Room : -right
     Room : -left
     Room : -forward
-    Room : -back
     Room : -visit_status
     Room : -description
     TreasureRoom : -items
@@ -86,7 +85,6 @@ classDiagram
     Map : +go_right()
     Map : +go_forward()
     Map : +go_left()
-    Map : +go_back()
     Map : +display()
 ```
 ```mermaid
