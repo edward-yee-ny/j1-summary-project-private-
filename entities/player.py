@@ -47,5 +47,3 @@ class Player(Entity):
         elif item.type == WEAPON:
             self.cur_weapon = item
         return
-    
-Player().reset_hp()

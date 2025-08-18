@@ -13,10 +13,4 @@ class BattleRoom(Room):
         super().display()
         print(f"Enemy: {self.enemy}")
         print(f"Battle Type: {self.battle_type}")
-        print(f"Reward: {self.reward}")
-    
-    def get_reward(self):
-        return self.reward if self.reward else "No reward available."
-    
-        
-        
+        print(f"Reward: {self.reward}")    

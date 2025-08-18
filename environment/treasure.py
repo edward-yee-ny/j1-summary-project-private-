@@ -7,9 +7,7 @@ class TreasureRoom(Room):
         self.room_type = "treasure"
         self.description = "You are in a treasure room."
         
-    def get_reward(self):
-        return self.items if self.items else "No items available."
-        
     def display(self):
+        """displays the item assigned to the room"""
         super().display()
         print(f"Item: {self.item}")
