@@ -74,23 +74,29 @@ class Map:
     def go_right(self):
         if self.currentRoom.right is None:
             print("No room lies to the right.")
+            return False
         else:
             self.currentRoom = self.currentRoom.right
             self.currentRoom.display()
+            return True
     
     def go_left(self):
         if self.currentRoom.left is None:
             print("No room lies to the left.")
+            return False
         else:
             self.currentRoom = self.currentRoom.left
             self.currentRoom.display()
+            return True
     
     def go_forward(self):
         if self.currentRoom.forward is None:
             print("No room lies forward.")
+            return False
         else:
             self.currentRoom = self.currentRoom.forward
             self.currentRoom.display()
+            return True
         
     def displayCurrentRoom(self):
         self.currentRoom.display()
