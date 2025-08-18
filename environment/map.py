@@ -85,8 +85,10 @@ class Map:
     def go_right(self):
         if self.currentRoom.right is None:
             print("No room lies to the right.")
-        elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
+            return False
+        if self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
+            return "end"
         else:
             self.currentRoom = self.currentRoom.right
             self.currentRoom.display()
@@ -94,8 +96,10 @@ class Map:
     def go_left(self):
         if self.currentRoom.left is None:
             print("No room lies to the left.")
+            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
+            return "end"
         else:
             self.currentRoom = self.currentRoom.left
             self.currentRoom.display()
@@ -103,8 +107,10 @@ class Map:
     def go_forward(self):
         if self.currentRoom.forward is None:
             print("No room lies forward.")
+            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
+            return "end"
         else:
             self.currentRoom = self.currentRoom.forward
             self.currentRoom.display()
