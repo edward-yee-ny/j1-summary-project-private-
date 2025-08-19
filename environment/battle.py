@@ -4,7 +4,7 @@ class BattleRoom(Room):
     def __init__(self):
         super().__init__()
         self.room_type = "battle"
-        self.description = "You are in a battle room."
+        self.description = "ENTERED: BATTLEROOM."
         self.enemy = None
         self.battle_type = 'normal'
         self.reward = None

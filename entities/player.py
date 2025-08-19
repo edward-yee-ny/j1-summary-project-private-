@@ -4,12 +4,16 @@ from objects.item import Item, ARMOR, WEAPON
 
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
-    def __init__(self, hp, name, description):
-        super().__init__(hp, 100, name, description)
+    def __init__(self):
+        super().__init__(1750, 100)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
     
+    def display_stats(self):
+        print("\nYOUR STATS:\n------------", end='')
+        super().display_stats()
+        
     def reset_hp(self):
         '''Use this function to reset the Player's HP before each battle.'''
         self.hp = 1750
@@ -20,7 +24,7 @@ class Player(Entity):
     
     def open_inventory(self):
         """Prints out the current items stored in a player's inventory."""
-        print("Your current items:", " ".join(self.inventory))
+        print("Your current items:", self.inventory)
         return
     
     def update_inventory(self, item):
@@ -38,7 +42,8 @@ class Player(Entity):
         """Calculates total damage based on base damage and armor reduction."""
         # For now, just use update_hp()... maybe when the game is more complicated,
         # add something here :)
-        return self.update_hp(-base_dmg)
+        self.update_hp(-base_dmg)
+        return self.hp <= 0
     
     def update_equipment(self, item: Item):
         """Updates the equipment."""

@@ -5,7 +5,10 @@ class EliteBattleRoom(BattleRoom):
     def __init__(self):
         super().__init__()
         self.room_type = "elite"
-        self.description = "You are in an elite battle room with two formidable enemies."
+        self.description = """STAGE 3: SEMI-FINALS 
+Competitors, welcome to the semi-finals of the tournament 
+Please proceed to choose your opponents
+"""
         self.battle_type = 'elite'
         self.reward2 = None
         self.enemy2 = None
