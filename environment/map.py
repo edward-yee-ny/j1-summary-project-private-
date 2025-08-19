@@ -24,17 +24,17 @@ class Map:
         eliteEnemies = monsterData['elite_enemies']
         itemsData = itemsData['items']
         
-        startRoom = Room()
+        startRoom = Room('Starting Room')
         startRoom.description = "You are in the starting room. Choose a direction to proceed."
         
-        battleRoom1 = BattleRoom()
-        treasureRoom1 = TreasureRoom()
-        battleRoom2 = BattleRoom()
-        treasureRoom2 = TreasureRoom()
-        treasureRoom3 = TreasureRoom()
-        elitebattleRoom = EliteBattleRoom()
-        battleRoom3 = BattleRoom()
-        bossRoom = BossRoom()
+        battleRoom1 = BattleRoom('Battle Room 1')
+        treasureRoom1 = TreasureRoom('Treasure Room 1')
+        battleRoom2 = BattleRoom('Battle Room 2')
+        treasureRoom2 = TreasureRoom('Treasure Room 2')
+        treasureRoom3 = TreasureRoom('Treasure Room 3')
+        elitebattleRoom = EliteBattleRoom('Elite Battle Room')
+        battleRoom3 = BattleRoom('Battle Room 3')
+        bossRoom = BossRoom('Boss Battle Room')
         
         basicEnemyIndexes = shuffleListPositions(list(range(len(basicEnemies))))
         eliteEnemyIndexes = shuffleListPositions(list(range(len(eliteEnemies))))
@@ -85,38 +85,29 @@ class Map:
     def go_right(self):
         if self.currentRoom.right is None:
             print("No room lies to the right.")
-            return False
-        if self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
+        elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.right
             self.currentRoom.display()
-            return True
     
     def go_left(self):
         if self.currentRoom.left is None:
             print("No room lies to the left.")
-            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.left
             self.currentRoom.display()
-            return True
     
     def go_forward(self):
         if self.currentRoom.forward is None:
             print("No room lies forward.")
-            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.forward
             self.currentRoom.display()
-            return True
         
     def displayCurrentRoom(self):
         self.currentRoom.display()
