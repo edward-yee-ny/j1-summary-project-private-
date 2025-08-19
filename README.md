@@ -12,7 +12,7 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ## Members
 
 - Edward Yee (Team Lead)
-- Lohith Ishan (Test Enginneer)
+- Lohith Ishan Balasubramaniyan (Test Enginneer)
 - Luke Yeo (Game Programmer)
 - Matthew Na (Game Programmer)
 - Matthew Sim (Data Designer)
