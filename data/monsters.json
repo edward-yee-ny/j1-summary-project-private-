@@ -45,39 +45,10 @@
     ]
 }
 
-{
-  "Competitors": [
-    {
-      "Name": "(name of enemy)",
-      "HP": null,
-      "ATK": null
-    },
-    {
-      "Name": "Player",
-      "HP": null,
-      "ATK": null
-    }
-  ]
-}
-
-{
-  "Player_Action_Report": {
-    "Description": "Atk is enhanced by (multiplier)",
-    "Damage_Dealt": "You have dealt (dmg)"
-  },
-  "Opponent_Action": {
-    "Description": "Opponent dealt (dmg) damage to you",
-    "Damage_Received": "(dmg)"
-  }
-}
 
 
 
 
-{
-  "Battle_Outcomes": {
-    "Victory": "YOU HAVE DEFEATED THE OPPONENT",
-    "Defeat": "YOU HAVE BEEN DEFEATED",
-    "Consolation": "Better luck next time"
-  }
-}
+
+
+
