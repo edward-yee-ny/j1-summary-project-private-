@@ -94,7 +94,7 @@ classDiagram
     Map : +go_right()
     Map : +go_forward()
     Map : +go_left()
-    Map : +display()
+    Map : +displayCurrentRoom()
 ```
 ```mermaid
 classDiagram
