@@ -60,6 +60,7 @@ pls change when decided on whether stats should be a separate class or just inte
 classDiagram
     Room <|-- TreasureRoom
     Room <|-- BattleRoom
+    BattleRoom <|-- EliteBattleRoom
     Room : -right
     Room : -left
     Room : -forward
@@ -71,12 +72,19 @@ classDiagram
     TreasureRoom :description
     TreasureRoom : +get_reward()
     TreasureRoom : +display()
+    BattleRoom : -room_type
+    BattleRoom : -description
     BattleRoom : -enemy
     BattleRoom : -battle_type
     BattleRoom : -reward
-    BattleRoom : +display_room()
+    BattleRoom : +display()
     BattleRoom : +get_reward()
-    
+    EliteBattleRoom : -room_type
+    EliteBattleRoom : -description
+    EliteBattleRoom : -battle_type
+    EliteBattleRoom : -reward2
+    EliteBattleRoom : -enemy2
+    EliteBattleRoom : +display()
 ```
 ```mermaid
 classDiagram
