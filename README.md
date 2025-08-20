@@ -65,9 +65,12 @@ classDiagram
     Room : -forward
     Room : -visit_status
     Room : -description
-    TreasureRoom : -items
-    TreasureRoom : +get_item()
-    TreasureRoom : +display_room()
+    Room : +display()
+    TreasureRoom : -item
+    TreasureRoom : room_type
+    TreasureRoom :description
+    TreasureRoom : +get_reward()
+    TreasureRoom : +display()
     BattleRoom : -enemy
     BattleRoom : -battle_type
     BattleRoom : -reward
