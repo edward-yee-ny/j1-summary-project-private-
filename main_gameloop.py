@@ -23,6 +23,7 @@ print("""
 def prompt_room_choice():
     while True:
         choice = input("Key in your choice of 1,2 or 3: ")
+        print("\n")
         if choice == "1":
             game.go_left()
             break
@@ -33,7 +34,7 @@ def prompt_room_choice():
             game.go_right()
             break
         else:
-            print("Invalid input")
+            print("Invalid input \n")
     return choice
 
 
@@ -41,7 +42,8 @@ def battle_sequence():
     # initialising necessary variables
     enemy = game.currentRoom.enemy
     player.reset_hp()
-    game.currentRoom.display()
+    print("hey")
+    print("no")
     game_over = False
 
     # fighting loop
@@ -70,7 +72,7 @@ def battle_sequence():
         if action == "2":
             player.open_inventory()
             while True:
-                exit_ = input("exit? \n key in y to exit:")
+                exit_ = input("exit? \n key in y to exit: ")
                 if exit_ == "y":
                     break
             # for now this is all it does
@@ -89,9 +91,9 @@ def handle_room_action(room_type):
     if room_type == "treasure":
         reward = game.currentRoom.item
         player.update_inventory(reward)
-        game.currentRoom.display()
         print("\n", "a new item has been added into your inventory!")
         player.update_equipment(reward)
+        player.open_inventory()
 
     if room_type == "boss":
         battle_sequence()
