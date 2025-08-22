@@ -47,17 +47,17 @@ class Map:
             else:
                 itemsData.append(Item(item['hp'], 0, item['name'], item['type']))
         
-        startRoom = Room()
+        startRoom = Room('Starting Room')
         startRoom.description = "You are in the starting room. Choose a direction to proceed."
         
-        battleRoom1 = BattleRoom()
-        treasureRoom1 = TreasureRoom()
-        battleRoom2 = BattleRoom()
-        treasureRoom2 = TreasureRoom()
-        treasureRoom3 = TreasureRoom()
-        elitebattleRoom = EliteBattleRoom()
-        battleRoom3 = BattleRoom()
-        bossRoom = BossRoom()
+        battleRoom1 = BattleRoom('Battle Room 1')
+        treasureRoom1 = TreasureRoom('Treasure Room 1')
+        battleRoom2 = BattleRoom('Battle Room 2')
+        treasureRoom2 = TreasureRoom('Treasure Room 2')
+        treasureRoom3 = TreasureRoom('Treasure Room 3')
+        elitebattleRoom = EliteBattleRoom('Elite Battle Room')
+        battleRoom3 = BattleRoom('Battle Room 3')
+        bossRoom = BossRoom('Boss Battle Room')
         
         basicEnemyIndexes = shuffleListPositions(list(range(len(basicEnemies))))
         eliteEnemyIndexes = shuffleListPositions(list(range(len(eliteEnemies))))

@@ -1,0 +1,14 @@
+{
+  "Competitors": [
+    {
+      "Name": "(name of enemy)",
+      "HP": null,
+      "ATK": null
+    },
+    {
+      "Name": "Player",
+      "HP": null,
+      "ATK": null
+    }
+  ]
+}

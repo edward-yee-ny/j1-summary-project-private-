@@ -1,8 +1,8 @@
 from .room import Room
 
 class BattleRoom(Room):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, name):
+        super().__init__(name)
         self.room_type = "battle"
         self.description = "ENTERED: BATTLEROOM."
         self.enemy = None

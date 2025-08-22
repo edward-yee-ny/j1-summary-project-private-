@@ -12,7 +12,7 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ## Members
 
 - Edward Yee (Team Lead)
-- Lohith Ishan (Test Enginneer)
+- Lohith Ishan Balasubramaniyan (Test Enginneer)
 - Luke Yeo (Game Programmer)
 - Matthew Na (Game Programmer)
 - Matthew Sim (Data Designer)
@@ -60,20 +60,31 @@ pls change when decided on whether stats should be a separate class or just inte
 classDiagram
     Room <|-- TreasureRoom
     Room <|-- BattleRoom
+    BattleRoom <|-- EliteBattleRoom
     Room : -right
     Room : -left
     Room : -forward
     Room : -visit_status
     Room : -description
-    TreasureRoom : -items
-    TreasureRoom : +get_item()
-    TreasureRoom : +display_room()
+    Room : +display()
+    TreasureRoom : -item
+    TreasureRoom : room_type
+    TreasureRoom :description
+    TreasureRoom : +get_reward()
+    TreasureRoom : +display()
+    BattleRoom : -room_type
+    BattleRoom : -description
     BattleRoom : -enemy
     BattleRoom : -battle_type
     BattleRoom : -reward
-    BattleRoom : +display_room()
+    BattleRoom : +display()
     BattleRoom : +get_reward()
-    
+    EliteBattleRoom : -room_type
+    EliteBattleRoom : -description
+    EliteBattleRoom : -battle_type
+    EliteBattleRoom : -reward2
+    EliteBattleRoom : -enemy2
+    EliteBattleRoom : +display()
 ```
 ```mermaid
 classDiagram
@@ -83,7 +94,7 @@ classDiagram
     Map : +go_right()
     Map : +go_forward()
     Map : +go_left()
-    Map : +display()
+    Map : +displayCurrentRoom()
 ```
 ```mermaid
 classDiagram
@@ -110,6 +121,7 @@ classDiagram
     Item : -hp
     Item : -atk
     Item : -name
+    Item : -type
     Item : +display_stats()
 ```
 
