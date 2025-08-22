@@ -11,7 +11,7 @@ game_over = False
 
 print("""
  ___                                ___     _    _                                               _   _                   _      _   
-|  _`\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
+|  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
 | (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     |   __     __     _ _    | |/'/'  ___  (_)   __  | |__  | ,_)
 | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
 | |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
@@ -37,13 +37,8 @@ def prompt_room_choice():
             print("Invalid input \n")
     return choice
 
-
-def battle_sequence():
-    # initialising necessary variables
-    enemy = game.currentRoom.enemy
+def fight(enemy):
     player.reset_hp()
-    print("hey")
-    print("no")
     game_over = False
 
     # fighting loop
@@ -72,11 +67,25 @@ def battle_sequence():
         if action == "2":
             player.open_inventory()
             while True:
-                exit_ = input("exit? \n key in y to exit: ")
+                exit_ = input("\n exit? \n key in y to exit: ")
                 if exit_ == "y":
                     break
-            # for now this is all it does
-    
+
+def battle_sequence(battle_type):
+    # initialising necessary variables
+    if battle_type == "normal":
+        enemy = game.currentRoom.enemy
+        print(enemy)
+        fight(enemy)
+    elif battle_type == "elite":
+        enemy1 = game.currentRoom.enemy1
+        enemy2 = game.currentRoom.enemy2
+        fight(enemy1)
+        f
+        :
+  wewgame        boss =boss.currentRoom.enemy
+        fight(enemy)
+
     return None
 
 def get_room_type():
@@ -85,18 +94,15 @@ def get_room_type():
 
 def handle_room_action(room_type):
     """depending on the type of room carries out the appropriate actions"""
-    if room_type == "battle":
-        battle_sequence()
 
     if room_type == "treasure":
         reward = game.currentRoom.item
         player.update_inventory(reward)
-        print("\n", "a new item has been added into your inventory!")
+        print("\n", "A new item has been added into your inventory!")
         player.update_equipment(reward)
         player.open_inventory()
-
-    if room_type == "boss":
-        battle_sequence()
+    else:
+        battle_sequence(room_type)
 
 
 # intro
@@ -108,7 +114,7 @@ game.displayCurrentRoom()
 #game running code
 while not game_over:
     # display possible paths
-    print("Pick a direction to move in", "\n", "1. Left", "\n", "2. Middle", "\n", "3. Right")
+    print("Pick a direction to move in \n 1. Left \n 2. Middle \n 3. Right")
     
     # get the choice and move into the chosen room
     choice = prompt_room_choice()

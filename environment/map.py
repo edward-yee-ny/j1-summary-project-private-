@@ -98,7 +98,7 @@ class Map:
         elitebattleRoom.reward = itemsData[itemIndexes[-2]]
         elitebattleRoom.reward2 = itemsData[itemIndexes[-3]]
         
-        bossRoom.enemy = eliteEnemies[eliteEnemyIndexes[-1]]
+        bossRoom.enemy = eliteEnemies[eliteEnemyIndexes[2]]
         bossRoom.reward = itemsData[itemIndexes[-4]]
         
         self.head = startRoom
@@ -108,7 +108,7 @@ class Map:
     def go_right(self):
         if self.currentRoom.right is None:
             print("No room lies to the right.")
-        if self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
+        elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.currentRoom.right
