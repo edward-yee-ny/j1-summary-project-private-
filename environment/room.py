@@ -7,6 +7,7 @@ class Room:
         self.name = name
         self.description = "You are in a room."
         self.room_type = None
+        self.isCompleted = False
     
     def display(self):
         print(f"Room Name: {self.name}")

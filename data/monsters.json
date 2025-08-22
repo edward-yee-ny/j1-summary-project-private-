@@ -55,7 +55,7 @@
         {
             "name": "Archer",
             "hp": 750,
-            "atk": 300
+            "atk": 250
         },
         {
             "name": "Firecracker",

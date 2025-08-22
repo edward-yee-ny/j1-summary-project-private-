@@ -2,8 +2,21 @@
 from environment.map import *
 from objects.item import Item 
 from entities.player import Player
+from environment.boss import BossRoom
+from helper.extract_json import extractJson
+from time import sleep
+from pack_json import 
 
-# initialising
+def open_and_dict(filename):
+    with open(filename, 'r') as f:
+        data = f.read()
+    res = extractJson(data)
+    return res
+
+BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
+DAMAGE_REPORT = open_and_dict('data/damage_report.json')
+
+    # initialising
 # add in the basic options, want to start the game or not (strat game load game quit)
 game = Map()
 player = Player()
@@ -12,7 +25,7 @@ game_over = False
 print("""
  ___                                ___     _    _                                               _   _                   _      _   
 |  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
-| (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     |   __     __     _ _    | |/'/'  ___  (_)   __  | |__  | ,_)
+| (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     | \ ___     __     _ _   | |/'/'  ___  (_)   __  | |__  | ,_)
 | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
 | |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
 (_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
@@ -21,6 +34,10 @@ print("""
 """)
 # functions used
 def prompt_room_choice():
+    """
+    handles the room choice and moves into the room selected
+    handles the choice to save game data
+    """
     while True:
         choice = input("Key in your choice of 1,2 or 3: ")
         print("\n")
@@ -33,9 +50,16 @@ def prompt_room_choice():
         elif choice == "3":
             game.go_right()
             break
+        elif choice == "4":
+            # allows the player ot equip the equipment of their choice
+            print("hello")
+        elif choice == "5":
+            #put save function here
+            print("work in progress...")
+            break
         else:
-            print("Invalid input \n")
-    return choice
+            print("\n Invalid input \n")
+    return None
 
 def fight(enemy):
     player.reset_hp()
@@ -43,17 +67,23 @@ def fight(enemy):
 
     # fighting loop
     while not game_over:
+        
         player.display_stats()
         enemy.display_stats()
+        
+        sleep(2)
 
         action = input("\n what action do you take \n 1. attack \n 2. open inventory \n input your choice: ")
         
         if action == "1": # player attack the enemy
-            damage = player.calculate_atk()
+            multi, damage = player.calculate_atk()
             enemy.update_hp(-damage)
+            print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multi)))
+            print(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)))
+            sleep(0.6)
 
             if enemy.hp <= 0:
-                print("\n", "congrats you win")
+                print("\n", BATTLE_OUTCOMES['Victory'])
                 # gives and autoequips the reward item for the player
                 reward = game.currentRoom.reward
                 player.update_inventory(reward)
@@ -61,30 +91,31 @@ def fight(enemy):
                 break
             # enemy attack the player
             if player.calculate_dmg(enemy.atk):
-                print("\n", "game over")
-                game_over = True
+                print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
+                exit(1)
+            
+            print(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)))
 
-        if action == "2":
+        elif action == "2":
             player.open_inventory()
-            while True:
-                exit_ = input("\n exit? \n key in y to exit: ")
-                if exit_ == "y":
-                    break
+        else:
+            print("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.")
+        
+        sleep(1)
 
 def battle_sequence(battle_type):
     # initialising necessary variables
     if battle_type == "normal":
         enemy = game.currentRoom.enemy
-        print(enemy)
         fight(enemy)
     elif battle_type == "elite":
-        enemy1 = game.currentRoom.enemy1
+        enemy1 = game.currentRoom.enemy
         enemy2 = game.currentRoom.enemy2
         fight(enemy1)
-        f
-        :
-  wewgame        boss =boss.currentRoom.enemy
-        fight(enemy)
+        fight(enemy2)
+    else:
+        boss = game.currentRoom.enemy
+        fight(boss)
 
     return None
 
@@ -114,16 +145,19 @@ game.displayCurrentRoom()
 #game running code
 while not game_over:
     # display possible paths
-    print("Pick a direction to move in \n 1. Left \n 2. Middle \n 3. Right")
+    print("Pick a direction to move in \n 1. Left \n 2. Middle \n 3. Right \n 4. Equip equipment \n 5. Save")
     
     # get the choice and move into the chosen room
-    choice = prompt_room_choice()
+    prompt_room_choice()
 
     # check room type, handle room actions
-    room_type = get_room_type()
-    handle_room_action(room_type)
+    if not game.currentRoom.isCompleted:
+        room_type = get_room_type()
+        handle_room_action(room_type)
+        game.currentRoom.isCompleted = True
+    
+    # If it's a BossRoom completed, end the game.
+    if isinstance(game.currentRoom, BossRoom):
+        game_over = True
 
-    # - treasure room
-    # - battle room
-
-print("ByeBye!! :)","\n","please try again")
+print("\n You have completed the dungeon!! :)","\n","We hope you come back again...")

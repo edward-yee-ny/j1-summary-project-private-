@@ -1,7 +1,5 @@
 {
-  "Battle_Outcomes": {
     "Victory": "YOU HAVE DEFEATED THE OPPONENT",
     "Defeat": "YOU HAVE BEEN DEFEATED",
     "Consolation": "Better luck next time"
-  }
 }

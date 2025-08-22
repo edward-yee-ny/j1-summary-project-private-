@@ -15,7 +15,8 @@ from helper.extract_json import extractJson
 
 class Map:
     def __init__(self):
-
+        # saves the directions here
+        self.direction_save_arr = []
         monsterData = {}
         itemsData = {}
 
@@ -112,6 +113,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.currentRoom.right
+            self.direction_save_arr.append("right")
             self.currentRoom.display()
     
     def go_left(self):
@@ -121,6 +123,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.currentRoom.left
+            self.direction_save_arr.append("left")
             self.currentRoom.display()
     
     def go_forward(self):
@@ -130,6 +133,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.currentRoom.forward
+            self.direction_save_arr.append('forward')
             self.currentRoom.display()
         
     def displayCurrentRoom(self):

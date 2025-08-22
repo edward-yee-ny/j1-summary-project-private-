@@ -7,10 +7,8 @@ class Entity:
         self.atk = atk
     
     def display_stats(self) -> None:
-        print(f"""
-HP: {self.hp}
-ATK: {self.atk}
-            \n""")
+        print(f"""HP: {self.hp}
+ATK: {self.atk}""")
         return
     
     def update_hp(self, difference):

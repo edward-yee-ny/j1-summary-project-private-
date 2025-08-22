@@ -5,13 +5,13 @@ from objects.item import Item, ARMOR, WEAPON
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self):
-        super().__init__(1750, 100)
+        super().__init__(1750, 200)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None
     
     def display_stats(self):
-        print("\nYOUR STATS:\n------------", end='')
+        print("----- YOUR STATS:-----")
         super().display_stats()
         
     def reset_hp(self):
@@ -34,9 +34,12 @@ class Player(Entity):
     
     def calculate_atk(self) -> int:
         """Calculates the attack that this Player should deal."""
+        multi = round(1+random(), 2)
+        
         if not self.cur_weapon:
-            return round((1+random()) * 100) # Fist? As if!!
-        return round((1+random()) * self.cur_weapon.atk) # WEAPON ATTACK HERE
+            return multi, round(multi * self.atk) # Fist? As if!!
+        
+        return multi, round(multi * (self.atk + self.cur_weapon.atk)) # WEAPON ATTACK HERE
     
     def calculate_dmg(self, base_dmg):
         """Calculates total damage based on base damage and armor reduction."""

@@ -8,7 +8,7 @@ class Enemy(Entity):
         self.enemy_type = enemy_type
     
     def display_stats(self):
-        print("ENEMY STATS:\n------------", end='')
+        print("----- ENEMY STATS:-----")
         super().display_stats()
 
     def __repr__(self):
