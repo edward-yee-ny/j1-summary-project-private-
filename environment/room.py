@@ -5,6 +5,7 @@ class Room:
         self.forward = None
         self.visit_status = False
         self.description = "You are in a room."
+        self.room_type = None
     
     def display(self):
         print(self.description)

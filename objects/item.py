@@ -9,11 +9,6 @@ class Item:
         self.name = name
         self.type = type
         
-    def display_stats(self):
-        print(f"""
-Name: {self.name} ({self.type})
-
-HP: {self.hp}
-ATK: {self.atk}
-""")
-        return
+    def __repr__(self):
+        return f"""{self.name} (TYPE: {self.type}, HP: {self.hp}, ATK: {self.atk})"""
+        

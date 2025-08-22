@@ -4,41 +4,59 @@ from objects.item import Item
 from entities.player import Player
 
 # initialising
+# add in the basic options, want to start the game or not (strat game load game quit)
 game = Map()
 player = Player()
 game_over = False
 
-
+print("""
+ ___                                ___     _    _                                               _   _                   _      _   
+|  _`\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
+| (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     |   __     __     _ _    | |/'/'  ___  (_)   __  | |__  | ,_)
+| ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
+| |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
+(_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
+                                                                               ( )_) |                           ( )_) |            
+                                                                                \___/'                            \___/'            
+""")
 # functions used
 def prompt_room_choice():
-    check = True
-    while check:
+    while True:
         choice = input("Key in your choice of 1,2 or 3: ")
+        print("\n")
         if choice == "1":
-            check = not game.go_left()
+            game.go_left()
+            break
         elif choice == "2":
-            check = not game.go_forward()
+            game.go_forward()
+            break
         elif choice == "3":
-            check = not game.go_right()
+            game.go_right()
+            break
         else:
-            print("Invalid input")
+            print("Invalid input \n")
     return choice
 
 
 def battle_sequence():
     # initialising necessary variables
-    enemy = currentRoom.enemy
-    player.reset_hp
-    game.currentRoom.display()
+    enemy = game.currentRoom.enemy
+    player.reset_hp()
+    print("hey")
+    print("no")
+    game_over = False
 
     # fighting loop
-    while True:
+    while not game_over:
+        player.display_stats()
         enemy.display_stats()
-        action = input("what action do you take", "\n", "1. attack", "\n", "2. open inventory")
+
+        action = input("\n what action do you take \n 1. attack \n 2. open inventory \n input your choice: ")
         
         if action == "1": # player attack the enemy
-            damage = player.calculate_atk
+            damage = player.calculate_atk()
             enemy.update_hp(-damage)
+
             if enemy.hp <= 0:
                 print("\n", "congrats you win")
                 # gives and autoequips the reward item for the player
@@ -46,15 +64,18 @@ def battle_sequence():
                 player.update_inventory(reward)
                 player.update_equipment(reward)
                 break
+            # enemy attack the player
+            if player.calculate_dmg(enemy.atk):
+                print("\n", "game over")
+                game_over = True
+
         if action == "2":
             player.open_inventory()
+            while True:
+                exit_ = input("exit? \n key in y to exit: ")
+                if exit_ == "y":
+                    break
             # for now this is all it does
-
-        # enemy attack the player
-        player.update_hp(-enemy.atk)
-        if player.hp <= 0:
-            print("\n", "game over")
-            game_over = True
     
     return None
 
@@ -70,9 +91,9 @@ def handle_room_action(room_type):
     if room_type == "treasure":
         reward = game.currentRoom.item
         player.update_inventory(reward)
-        game.currentRoom.display()
         print("\n", "a new item has been added into your inventory!")
         player.update_equipment(reward)
+        player.open_inventory()
 
     if room_type == "boss":
         battle_sequence()
@@ -99,4 +120,4 @@ while not game_over:
     # - treasure room
     # - battle room
 
-print("ByeBye!! :)")
+print("ByeBye!! :)","\n","please try again")
