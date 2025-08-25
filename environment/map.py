@@ -4,13 +4,19 @@ from .room import Room
 from .treasure import TreasureRoom
 from .elite_battle_room import EliteBattleRoom
 
+from entities.enemy import Enemy
+
+from objects.item import Item
+from objects.item import WEAPON, ARMOR
+
 from helper.shuffle_positions import shuffleListPositions
 
 from helper.extract_json import extractJson
 
 class Map:
     def __init__(self):
-
+        # saves the directions here
+        self.direction_save_arr = []
         monsterData = {}
         itemsData = {}
 
@@ -20,9 +26,27 @@ class Map:
         with open('data/items.json', 'r') as f:
             itemsData = extractJson(f.read())
         
-        basicEnemies = monsterData['basic_enemies']
-        eliteEnemies = monsterData['elite_enemies']
-        itemsData = itemsData['items']
+        basicEnemiesRaw = monsterData['basic_enemies']
+        eliteEnemiesRaw = monsterData['elite_enemies']
+        
+        basicEnemies = []
+        eliteEnemies = []
+        
+        for enemy in basicEnemiesRaw:
+            basicEnemies.append(Enemy(enemy['hp'], enemy['atk'], enemy['name'], 'basic'))
+            
+        for enemy in eliteEnemiesRaw:
+            eliteEnemies.append(Enemy(enemy['hp'], enemy['atk'], enemy['name'], 'elite'))
+        
+        itemsDataRaw = itemsData['items']
+        
+        itemsData = []
+        
+        for item in itemsDataRaw:
+            if item['type'] == WEAPON:
+                itemsData.append(Item(0, item['atk'], item['name'], item['type']))
+            else:
+                itemsData.append(Item(item['hp'], 0, item['name'], item['type']))
         
         startRoom = Room('Starting Room')
         startRoom.description = "You are in the starting room. Choose a direction to proceed."
@@ -75,7 +99,7 @@ class Map:
         elitebattleRoom.reward = itemsData[itemIndexes[-2]]
         elitebattleRoom.reward2 = itemsData[itemIndexes[-3]]
         
-        bossRoom.enemy = eliteEnemies[eliteEnemyIndexes[-1]]
+        bossRoom.enemy = eliteEnemies[eliteEnemyIndexes[2]]
         bossRoom.reward = itemsData[itemIndexes[-4]]
         
         self.head = startRoom
@@ -91,6 +115,7 @@ class Map:
             return "end"
         else:
             self.currentRoom = self.currentRoom.right
+            self.direction_save_arr.append("right")
             self.currentRoom.display()
     
     def go_left(self):
@@ -102,6 +127,7 @@ class Map:
             return "end"
         else:
             self.currentRoom = self.currentRoom.left
+            self.direction_save_arr.append("left")
             self.currentRoom.display()
     
     def go_forward(self):
@@ -113,6 +139,7 @@ class Map:
             return "end"
         else:
             self.currentRoom = self.currentRoom.forward
+            self.direction_save_arr.append('forward')
             self.currentRoom.display()
         
     def displayCurrentRoom(self):
