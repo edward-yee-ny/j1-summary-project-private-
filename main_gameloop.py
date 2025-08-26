@@ -5,7 +5,6 @@ from entities.player import Player
 from environment.boss import BossRoom
 from helper.extract_json import extractJson
 from time import sleep
-from pack_json import 
 
 def open_and_dict(filename):
     with open(filename, 'r') as f:
@@ -52,7 +51,14 @@ def prompt_room_choice():
             break
         elif choice == "4":
             # allows the player ot equip the equipment of their choice
-            print("hello")
+            player.open_inventory()
+            try:
+                CHOICE = int(input(f"Input the index of the equipment to equip (1-indexed): "))
+                player.update_equipment(player.inventory[CHOICE])
+                print(f"Item {player.inventory[CHOICE]} has been equipped successfully!")
+            except Exception as e:
+                print("Invalid input.")
+
         elif choice == "5":
             #put save function here
             print("work in progress...")
@@ -71,9 +77,9 @@ def fight(enemy):
         player.display_stats()
         enemy.display_stats()
         
-        sleep(2)
+        sleep(0.6)
 
-        action = input("\n what action do you take \n 1. attack \n 2. open inventory \n input your choice: ")
+        action = input("\nwhat action do you take \n1. attack \n2. open inventory \ninput your choice: ")
         
         if action == "1": # player attack the enemy
             multi, damage = player.calculate_atk()
@@ -101,7 +107,7 @@ def fight(enemy):
         else:
             print("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.")
         
-        sleep(1)
+        sleep(0.6)
 
 def battle_sequence(battle_type):
     # initialising necessary variables
@@ -153,6 +159,7 @@ while not game_over:
     # check room type, handle room actions
     if not game.currentRoom.isCompleted:
         room_type = get_room_type()
+        sleep(1.5)
         handle_room_action(room_type)
         game.currentRoom.isCompleted = True
     
