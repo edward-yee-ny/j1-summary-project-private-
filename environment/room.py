@@ -5,7 +5,6 @@ class Room:
         self.forward = None
         self.visit_status = False
         self.name = name
-        self.description = "You are in a room."
         self.room_type = None
         self.isCompleted = False
     

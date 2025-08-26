@@ -5,6 +5,7 @@ from objects.item import Item
 from environment.battle import BattleRoom
 from environment.boss import BossRoom
 from environment.elite_battle_room import EliteBattleRoom
+from environment.treasure import TreasureRoom
 
 class TestEntities(unittest.TestCase):
 
@@ -13,8 +14,8 @@ class TestEntities(unittest.TestCase):
         player = Player()
         player.display_stats()
 
-        #Check if damage is an integer
-        self.assertIsInstance(player.calculate_atk(), int)
+        #Check if damage is a tuple (base damage and multiplier)
+        self.assertIsInstance(player.calculate_atk(), tuple)
 
         #Checking if items are stored in inventory
         op_item = Item(-1,-1,"God itself", WEAPON)
@@ -40,7 +41,7 @@ class TestRooms(unittest.TestCase):
     def test_battle(self):
         enemy = Enemy(100, 100, "Jack", "boss")
         op_item = Item(-1,-1,"God itself",WEAPON)
-        r = BattleRoom()
+        r = BattleRoom("r1")
         r.enemy = enemy
         r.reward = op_item
         r.display()
@@ -48,7 +49,7 @@ class TestRooms(unittest.TestCase):
     def test_boss(self):
         enemy = Enemy(100, 100, "Jack", "boss")
         op_item = Item(-1,-1,"God itself",WEAPON)
-        r = BossRoom()
+        r = BossRoom("r1")
         r.enemy = enemy
         r.reward = op_item
         r.display()
@@ -57,12 +58,18 @@ class TestRooms(unittest.TestCase):
         enemy = Enemy(100, 100, "Jack", "boss")
         enemy2 = Enemy(100, 100, "Joseph", "boss")
         op_item = Item(-1,-1,"God itself",WEAPON)
-        r = EliteBattleRoom()
+        r = EliteBattleRoom("r1")
         r.enemy = enemy
         r.enemy2 = enemy2
         r.reward = op_item
         r.reward2 = op_item
         r.display()
+
+    def test_treasure(self):
+        t = TreasureRoom("r1")
+        op_item = Item(-1,-1,"God itself",WEAPON)
+        t.item = op_item
+        t.display()
 
 if __name__ == '__main__':
     unittest.main()

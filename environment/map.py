@@ -20,11 +20,9 @@ class Map:
         monsterData = {}
         itemsData = {}
 
-        with open('data/monsters.json', 'r') as f:
-            monsterData = extractJson(f.read())
-            
-        with open('data/items.json', 'r') as f:
-            itemsData = extractJson(f.read())
+        monsterData = extractJson('data/monsters.json')
+
+        itemsData = extractJson('data/items.json')
         
         basicEnemiesRaw = monsterData['basic_enemies']
         eliteEnemiesRaw = monsterData['elite_enemies']
@@ -65,7 +63,7 @@ class Map:
         itemIndexes = shuffleListPositions(list(range(len(itemsData))))
                 
         startRoom.left = battleRoom1
-        startRoom.middle = treasureRoom1
+        startRoom.forward = treasureRoom1
         startRoom.right = battleRoom2
         
         battleRoom1.forward = treasureRoom1
@@ -89,7 +87,7 @@ class Map:
         treasureRoom3.item = itemsData[itemIndexes[4]]
         
         battleRoom3.forward = bossRoom
-        battleRoom3.enemy = basicEnemies[2]
+        battleRoom3.enemy = basicEnemies[basicEnemyIndexes[2]]
         battleRoom3.reward = itemsData[itemIndexes[-1]]
         
         elitebattleRoom.left = bossRoom
@@ -109,10 +107,8 @@ class Map:
     def go_right(self):
         if self.currentRoom.right is None:
             print("No room lies to the right.")
-            return False
-        if self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
+        elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.right
             self.direction_save_arr.append("right")
@@ -121,10 +117,8 @@ class Map:
     def go_left(self):
         if self.currentRoom.left is None:
             print("No room lies to the left.")
-            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.left
             self.direction_save_arr.append("left")
@@ -133,10 +127,8 @@ class Map:
     def go_forward(self):
         if self.currentRoom.forward is None:
             print("No room lies forward.")
-            return False
         elif self.currentRoom.left is None and self.currentRoom.forward is None and self.currentRoom.right is None:
             print("This is the last room in the game.")
-            return "end"
         else:
             self.currentRoom = self.currentRoom.forward
             self.direction_save_arr.append('forward')

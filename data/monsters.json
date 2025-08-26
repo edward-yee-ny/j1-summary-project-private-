@@ -50,7 +50,7 @@
         {
             "name": "Baby_dragon",
             "hp": 1300,
-            "atk": 250
+            "atk": 210
         },
         {
             "name": "Archer",
@@ -60,7 +60,7 @@
         {
             "name": "Firecracker",
             "hp": 1500,
-            "atk": 250
+            "atk": 230
         },
         {
             "name": "Fisherman",

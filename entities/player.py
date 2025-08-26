@@ -35,11 +35,13 @@ class Player(Entity):
     def calculate_atk(self) -> int:
         """Calculates the attack that this Player should deal."""
         multi = round(1+random(), 2)
+        chance = random()
         
-        if not self.cur_weapon:
-            return multi, round(multi * self.atk) # Fist? As if!!
+        if chance > 0.2: # Random chance!
+            multi = 1
         
-        return multi, round(multi * (self.atk + self.cur_weapon.atk)) # WEAPON ATTACK HERE
+        
+        return multi, round(multi * self.atk) # Fist? As if!!
     
     def calculate_dmg(self, base_dmg):
         """Calculates total damage based on base damage and armor reduction."""
@@ -54,4 +56,5 @@ class Player(Entity):
             self.cur_armor = item
         elif item.type == WEAPON:
             self.cur_weapon = item
+            self.atk = 200 + self.cur_weapon.atk
         return
