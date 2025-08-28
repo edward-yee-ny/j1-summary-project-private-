@@ -7,7 +7,7 @@
         },
         {
             "name": "Sparky",
-            "hp": 2500,
+            "hp": 2100,
             "atk": 600
         },
         {
@@ -19,6 +19,16 @@
             "name": "Giant_Skeleton",
             "hp": 3000,
             "atk": 350
+        },
+        {
+            "name": "Skeleton_King",
+            "hp": 3000,
+            "atk": 300
+        },
+        {
+            "name": "Archer_Queen",
+            "hp": 2500,
+            "atk": 450
         }
     ],
     "basic_enemies": [
@@ -40,7 +50,22 @@
         {
             "name": "Baby_dragon",
             "hp": 1300,
+            "atk": 210
+        },
+        {
+            "name": "Archer",
+            "hp": 750,
             "atk": 250
+        },
+        {
+            "name": "Firecracker",
+            "hp": 1500,
+            "atk": 230
+        },
+        {
+            "name": "Fisherman",
+            "hp": 1750,
+            "atk": 200
         }
     ]
 }

@@ -1,0 +1,19 @@
+{
+    "Competitor" : [
+        {
+        "Name" : "Player",
+        "hp" : null,
+        "atk" : null
+        },
+        {
+        "Name" : "(name of enemy)",
+        "hp" : null,
+        "atk" : null
+        }
+    ],
+    "Room_sequence": [
+        {
+            "Sequence" : null
+        }
+    ]
+}

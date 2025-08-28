@@ -1,7 +1,7 @@
 {
   "Damage_Report": {
-    "Description": "Atk is enhanced by (multiplier)",
-    "Damage_Dealt": "You have dealt (dmg)"
+    "Description": "Atk is enhanced by (multiplier)!",
+    "Damage_Dealt": "You have dealt (dmg) damage!"
   },
   "Opponent_Action": {
     "Description": "Opponent dealt (dmg) damage to you",

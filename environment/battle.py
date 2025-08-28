@@ -1,10 +1,10 @@
 from .room import Room
-
+from helper.extract_json import extractJson
 class BattleRoom(Room):
     def __init__(self, name):
         super().__init__(name)
         self.room_type = "battle"
-        self.description = "You are in a battle room."
+        self.description = extractJson('data/room_description.json')["room_des"]["battle_room"]
         self.enemy = None
         self.battle_type = 'normal'
         self.reward = None
@@ -13,10 +13,4 @@ class BattleRoom(Room):
         super().display()
         print(f"Enemy: {self.enemy}")
         print(f"Battle Type: {self.battle_type}")
-        print(f"Reward: {self.reward}")
-    
-    def get_reward(self):
-        return self.reward if self.reward else "No reward available."
-    
-        
-        
+        print(f"Reward: {self.reward}")    

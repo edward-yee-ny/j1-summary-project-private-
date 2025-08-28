@@ -2,24 +2,34 @@
     "items": [
         {
             "name": "Front armour",
-            "hp": 350
+            "hp": 350,
+            "type": "armor"
         },
         {
             "name": "Fist reinforcements",
-            "atk": 200
+            "atk": 200,
+            "type": "weapon"
         },
         {
             "name": "Leg armour",
             "hp": 200,
-            "atk": 100
+            "type": "armor"
         },
         {
             "name": "Golden body armour",
-            "hp": 600
+            "hp": 600,
+            "type": "armor"
         },
         {
             "name": "Mythic spiked fist",
-            "atk": 400
+            "atk": 400,
+            "type": "weapon"
+        },
+        {
+            "name": "Titanium spiked fist",
+            "atk": 220,
+            "type": "weapon"
+
         }
     ]
 }
