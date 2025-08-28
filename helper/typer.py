@@ -1,27 +1,32 @@
 import time
 import sys
 
+saved_lens = []
 # Function to create the typewriter effect
-def write_effect(sentence, type_delay):
+def write_effect(sentence, i):
     # Loop through each character in the sentence
+    saved_lens.append(len(sentence))
     for char in sentence:
-
-        # Write, display and delay
         sys.stdout.write(char)
         sys.stdout.flush()
-        time.sleep(type_delay)
+        time.sleep(0.03)
+    if i:
+        u = input("")
+        return u
+    else:
+        print("")
 
-    # Pause after printing the entire sentence
     time.sleep(1)
-def delete_effect(delete_delay):
-    for _ in sentence:
-        # Write backspace, space, delete and delay
-        sys.stdout.write('\b \b')
-        sys.stdout.flush()
-        time.sleep(delete_delay)
+
 
 """
 typical settings.
 type_delay = 0.05
 delete_delay = 0.01
+
+write_effect("Hello!", False)
+write_effect("HIIII", True)
+
+delete_effect()
+write_effect("HIIII", False)
 """
