@@ -6,6 +6,7 @@ from environment.boss import BossRoom
 from helper.extract_json import extractJson
 from time import sleep
 import json
+import os
 from helper.pack_json import packJson
 from helper.typer import *
 
@@ -18,6 +19,12 @@ DAMAGE_REPORT = extractJson('data/damage_report.json')
 game = Map()
 player = Player()
 game_over = False
+def clear_terminal():
+    """Clears the terminal screen based on the operating system."""
+    if os.name == 'nt':  # Check if the operating system is Windows
+        os.system('cls')
+    else:  # Assume Unix-like system (Linux, macOS)
+        os.system('clear')
 
 print("""
  ___                                ___     _    _                                               _   _                   _      _   
@@ -30,6 +37,31 @@ print("""
                                                                                 \\___/'                            \\___/'            
 """)
 write_effect(f"""STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""", False)
+=======
+
+choice_load_or_new = input("""
+Welcome to the game, what would you like to do.
+1. New Game
+2. Load Game
+Key in the number :
+""")
+if choice_load_or_new == "1":
+    pass
+else:
+    for i in extractJson("save_state.json")["moves"]:
+        if i == "forward":
+            game.go_forward()
+            clear_terminal()
+        elif i == "right":
+            game.go_right()
+            clear_terminal()
+        else:
+            game.go_left
+            clear_terminal()
+        clear_terminal()
+
+print(f"""
+STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""")
 # functions used
 def prompt_room_choice():
     """
