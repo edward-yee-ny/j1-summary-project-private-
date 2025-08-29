@@ -8,6 +8,7 @@ from time import sleep
 import json
 import os
 from helper.pack_json import packJson
+from helper.typer import write_effect
 
 
 BATTLE_OUTCOMES = extractJson('data/battle_outcome.json')
@@ -18,6 +19,10 @@ DAMAGE_REPORT = extractJson('data/damage_report.json')
 game = Map()
 player = Player()
 game_over = False
+
+def find_item():
+    if 
+    
 def clear_terminal():
     """Clears the terminal screen based on the operating system."""
     if os.name == 'nt':  # Check if the operating system is Windows
@@ -27,25 +32,26 @@ def clear_terminal():
 
 print("""
  ___                                ___     _    _                                               _   _                   _      _   
-|  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
-| (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     | \ ___    __     _ _   | |/'/'  ___  (_)   __  | |__  | ,_)
+|  _`\  _                         /'___)   ( )_ ( )              /'\\_/`\                        ( ) ( )        _        ( )    ( )_ 
+| (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     |   __     __     _ _    | |/'/'  ___  (_)   __  | |__  | ,_)
 | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
-| |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
-(_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
+| |\ \ | |\\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
+(_) (_)(_)(____/`\\____)   `\\___/'(_)       `\\__)(_) (_)`\\____)   (_) (_)`\\____)`\\__  |`\\__,_)   (_) (_)(_) (_)(_)`\\__  |(_) (_)`\\__)
                                                                                ( )_) |                           ( )_) |            
-                                                                                \___/'                            \___/'            
+                                                                                \\___/'                            \\___/'            
 """)
 
 choice_load_or_new = input("""
 Welcome to the game, what would you like to do.
 1. New Game
 2. Load Game
-Key in the number :
-""")
+Key in the number : """)
 if choice_load_or_new == "1":
     pass
 else:
-    for i in extractJson("save_state.json")["moves"]:
+    save = extractJson("save_state.json")
+    # update location
+    for i in save["moves"]:
         if i == "forward":
             game.go_forward()
             clear_terminal()
@@ -53,12 +59,16 @@ else:
             game.go_right()
             clear_terminal()
         else:
-            game.go_left
+            game.go_left()
             clear_terminal()
+        
         clear_terminal()
+    
+    for item in save["inventory"]:
+        
 
-print(f"""
-STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""")
+write_effect(f"""
+STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""", False)
 # functions used
 def prompt_room_choice():
     """
@@ -66,7 +76,7 @@ def prompt_room_choice():
     handles the choice to save game data
     """
     while True:
-        choice = input("Key in your choice of 1,2,3,4, or 5: ")
+        choice = write_effect("Key in your choice of 1,2,3,4, or 5: ", True)
         if choice == "1": # left
             game.go_left()
             break
@@ -80,23 +90,31 @@ def prompt_room_choice():
             # allows the player ot equip the equipment of their choice
             player.open_inventory()
             try:
-                CHOICE = int(input(f"Input the index of the equipment to equip (1-indexed): "))-1
+                CHOICE = int(input(f"Input the index of the equipment to equip (0-indexed): "))-1
                 player.update_equipment(player.inventory[CHOICE])
-                print(f"Item {player.inventory[CHOICE]} has been equipped successfully!")
+                write_effect(f"Item {player.inventory[CHOICE]} has been equipped successfully!", False)
             except Exception as e:
-                print("Invalid input.")
+                write_effect("Invalid input.", False)
             
         
         elif choice == "5": # save game
             file_path = "save_state.json"
             
-            print("\nAttempting to save the game... (MK admires your patience!)")
+            write_effect("\nAttempting to save the game... (MK admires your patience!)", False)
+            inv = []
+            for item in player.inventory:
+                inv.append(item.name)
+
             with open(file_path, "w") as f:
-                json.dump({"moves" : game.direction_save_arr}, f)
+                json.dump(
+                    {
+                        "moves" : game.direction_save_arr,
+                        "inventory": inv,
+                    }, f)
             
             break
         else:
-            print("'WHERE IS THAT?' ~Mega Knight")
+            write_effect("'WHERE IS THAT?' ~Mega Knight", False)
     return None
 
 def fight(enemy):
@@ -119,29 +137,29 @@ def fight(enemy):
             enemy.update_hp(-damage)
             
             if multi > 1:
-                print("Megaknight feels a crit!")
-                print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multi)))
-            print(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)))
+                write_effect("Megaknight feels a crit!", False)
+                write_effect(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multi)), False)
+            write_effect(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)), False)
             sleep(0.6)
 
             if enemy.hp <= 0:
-                print("\n", BATTLE_OUTCOMES['Victory'])
+                write_effect(f"\n{BATTLE_OUTCOMES['Victory']}", False)
                 # gives and autoequips the reward item for the player
                 reward = game.currentRoom.reward
                 player.update_inventory(reward)
-                print("MEGAKNIGHT: I should really equip something!")
+                write_effect("MEGAKNIGHT: I should really equip something!", False)
                 break
             # enemy attack the player
             if player.calculate_dmg(enemy.atk):
                 print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
                 exit(1)
             
-            print(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)))
+            write_effect(f"\n{BATTLE_OUTCOMES["Defeat"]}\n{BATTLE_OUTCOMES["Consolation"]}", False)
 
         elif action == "2":
             player.open_inventory()
         else:
-            print("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.")
+            write_effect("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.", False)
         
         sleep(0.6)
 
@@ -179,7 +197,7 @@ def handle_room_action(room_type):
 
 
 # intro
-print("Welcome to the arena.",'\n', "You will assist Mega knight in competing in the tournament", '\n', "Winning each battle will give you an opportunity to choose your next opponent.", '\n', "Best of luck player")
+write_effect("Welcome to the arena.\nYou will assist Mega knight in competing in the tournament\nWinning each battle will give you an opportunity to choose your next opponent.\nBest of luck player", False)
 
 # initial description of the starting room
 game.displayCurrentRoom()
@@ -203,4 +221,4 @@ while not game_over:
     if isinstance(game.currentRoom, BossRoom):
         game_over = True
 
-print("\n You have completed the dungeon!! :)","\n","We hope you come back again...")
+write_effect("\nYou have completed the dungeon!! :)\nWe hope you come back again...",False)
