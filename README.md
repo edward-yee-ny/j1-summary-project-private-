@@ -26,25 +26,33 @@ In this game, you will help him get through his final trial. Can Mega Knight win
 ├── mud.py
 ├── environment
 ├───── map.py (linkedlist using room's child classes) --> use ascii to show which room player is at (use a 2d array and hardcode the entire map, find exact cooridinates and display on map)
-├───── room.py
 ├───── treasure.py (inherit from room)
 ├───── battle.py (inherit from room)
 ├───── boss.py (inherit from room)
+├───── elite_battle_room.py (inherit from room)
+├─────
 ├── entities
-├───── stats.py (name is subject to change, i added this because both monster and player have stats(id assume) --> inheritance, maybe polymorphic method actions() also?)
+├───── enemy.py
+├───── entity.py
+├───── player.py
 ├───── monster.py (could become enemy if it goes to mega knight lore)
 ├───── player.py 
 ├── objects
 ├───── item.py
-├───── inventory.py (potential hashtable, not necessary to overcomplicate though)
 ├───── ... (not too sure how many things Mr Tester will be needing)
 ├── data
 ├───── save.json
 ├───── items.json
-├───── monsters.json 
+├───── monsters.json
+├───── Interface.json
+├───── battle_outcome.json
+├───── room_description.json
+├───── save_game_state.json
 ├── helper
 ├───── extract_json.py
 ├───── pack_json.py
+├───── typer.py
+├─────shuffle_positions.py
 ├── test1.py
 ├── test2.py
 ├── test3.py 
