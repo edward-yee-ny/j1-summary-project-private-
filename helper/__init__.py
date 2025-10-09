@@ -2,6 +2,8 @@
 
 from typing import Any
 
+from .extract_json import extractJson
+
 
 def prompt_valid_choice(
         preamble: str,

@@ -4,34 +4,50 @@
 class Room:
     def __init__(self,
                  name: str,
-                 room_type: str,
-                 description: str):
+                 description: str,
+                 rooms: dict[str, str] | None = None):
         self.name = name
         self.description = description
-        self.room_type = room_type
-        self._right = None
-        self._left = None
-        self._forward = None
+        self._right: "Room | None" = None
+        self._left: "Room | None" = None
+        self._forward: "Room | None" = None
         self.visit_status = False
         self.isCompleted = False
+        self.rooms: dict[str, str | None] = {
+            "left": None,
+            "forward": None,
+            "right": None
+        }
+        if rooms:
+            for direction, room_name in rooms.items():
+                if direction not in self.rooms:
+                    raise ValueError(f"Invalid direction: {direction!r}")
+                self.rooms[direction] = room_name
 
-    def get_forward(self) -> "Room":
-        return self._forward
+    def get_forward(self) -> str | None:
+        return self.rooms["forward"]
 
-    def get_left(self) -> "Room":
-        return self._left
+    def get_left(self) -> str | None:
+        return self.rooms["left"]
 
-    def get_right(self) -> "Room":
-        return self._right
+    def get_right(self) -> str | None:
+        return self.rooms["right"]
 
-    def set_forward(self, room: "Room") -> None:
-        self._forward = room
+    def set_forward(self, room: str) -> None:
+        self.rooms["forward"] = room
 
-    def set_left(self, room: "Room") -> None:
-        self._left = room
+    def set_left(self, room: str) -> None:
+        self.rooms["left"] = room
 
-    def set_right(self, room: "Room") -> None:
-        self._right = room
+    def set_right(self, room: str) -> None:
+        self.rooms["right"] = room
+
+    def is_last_room(self) -> bool:
+        return (
+            self.get_left() is None and
+            self.get_forward() is None and
+            self.get_right() is None
+        )
 
     def display(self) -> None:
         print(f"Room Name: {self.name}")
@@ -40,12 +56,8 @@ class Room:
 
 class BattleRoom(Room):
     """Contains one or more enemies that have to be defeated to proceed."""
-    def __init__(self, name):
-        super().__init__(
-            name,
-            room_type="battle",
-            description="ENTERED: BATTLEROOM.",
-        )
+    def __init__(self, name, description):
+        super().__init__(name, description)
         self.enemies: list = []
         self.rewards: list = []
 
@@ -67,44 +79,10 @@ class BattleRoom(Room):
             print("Rewards: None")
 
 
-class BossRoom(Room):
-    def __init__(self, name):
-        super().__init__(
-            name,
-            room_type="boss",
-            description="STAGE 3: FINALS \nWe have come to the final round of the tournament who will be crowned the champion \nYou are in the boss room. Defeat the boss to win the game!"
-        )
-        self.enemies: list = []
-        self.rewards: list = []
-
-
-class EliteBattleRoom(Room):
-    """Contains 2 elite enemies that have to be defeated to proceed."""
-    def __init__(self, name):
-        super().__init__(
-            name,
-            room_type="elite",
-            description="STAGE 2: SEMI-FINALS\nCompetitors, welcome to the semi-finals of the tournament\nPlease proceed to choose your opponents"
-        )
-        self.enemies: list = []
-        self.rewards: list = []
-        
-    def display(self):
-        print(self.description)
-        print(f"Enemy 1: {self.enemy}")
-        print(f"Reward 1: {self.reward}")
-        print(f"Enemy 2: {self.enemy2}")
-        print(f"Reward 2: {self.reward2}")
-
-
 class TreasureRoom(Room):
     """Contains an item that can be picked up."""
-    def __init__(self, name):
-        super().__init__(
-            name,
-            room_type="treasure",
-            description="You are in a treasure room.",
-        )
+    def __init__(self, name, description):
+        super().__init__(name, description)
         self.item = None
 
     def get_item(self):

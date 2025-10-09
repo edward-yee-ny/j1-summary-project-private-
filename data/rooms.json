@@ -1,0 +1,82 @@
+{
+    "Battle Room 1": {
+        "type": "battle",
+        "description": "ENTERED: BATTLEROOM.",
+        "enemies": 1,
+        "rewards": 1,
+        "rooms": {
+            "forward": "Treasure Room 1"
+        }
+    },
+    "Battle Room 2": {
+        "type": "battle",
+        "description": "ENTERED: BATTLEROOM.",
+        "enemies": 1,
+        "rewards": 1,
+        "rooms": {
+            "forward": "Treasure Room 2"
+        }
+    },
+    "Battle Room 3": {
+        "type": "battle",
+        "description": "ENTERED: BATTLEROOM.",
+        "enemies": 1,
+        "rewards": 1,
+        "rooms": {
+            "forward": "Boss Battle Room"
+        }
+    },
+    "Boss Battle Room": {
+        "type": "boss",
+        "description": "STAGE 3: FINALS \nWe have come to the final round of the tournament who will be crowned the champion \nYou are in the boss room. Defeat the boss to win the game!",
+        "enemies": 1,
+        "rewards": 1,
+        "rooms": {}
+    },
+    "Elite Battle Room": {
+        "type": "elite",
+        "description": "STAGE 2: SEMI-FINALS\nCompetitors, welcome to the semi-finals of the tournament\nPlease proceed to choose your opponents",
+        "enemies": 2,
+        "rewards": 2,
+        "rooms": {
+            "left": "Boss Battle Room",
+            "right": "Battle Room 3"
+        }
+    },
+    "Starting Room": {
+        "type": "start",
+        "description": "You are in the starting room. Choose a direction to proceed.",
+        "rooms": {
+            "forward": "Treasure Room 1",
+            "left": "Battle Room 1",
+            "right": "Battle Room 2"
+        }
+    },
+    "Treasure Room 1": {
+        "type": "treasure",
+        "description": "You are in a treasure room.",
+        "items": 1,
+        "rooms": {
+            "left": "Elite Battle Room",
+            "right": "Battle Room 2"
+        }
+    },
+    "Treasure Room 2": {
+        "type": "treasure",
+        "description": "You are in a treasure room.",
+        "items": 1,
+        "rooms": {
+            "left": "Elite Battle Room",
+            "right": "Treasure Room 3"
+        }
+    },
+    "Treasure Room 3": {
+        "type": "treasure",
+        "description": "You are in a treasure room.",
+        "items": 1,
+        "rooms": {
+            "left": "Elite Battle Room",
+            "right": "Battle Room 3"
+        }
+    }
+}
