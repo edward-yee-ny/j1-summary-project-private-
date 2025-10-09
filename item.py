@@ -37,6 +37,9 @@ class Inventory:
         self._contents[item.name] = item
         return True
 
+    def get(self, item_name: str) -> Item:
+        return self._contents.get(item_name)
+
     def has(self, item_name: str) -> bool:
         """Returns True if the item is in inventory."""
         return item_name in self._contents
