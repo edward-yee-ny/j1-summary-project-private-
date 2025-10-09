@@ -1,3 +1,5 @@
+from typing import Iterator
+
 ARMOR = 'armor'
 WEAPON = 'weapon'
 
@@ -17,7 +19,11 @@ class Weapon(Item):
 class Armor(Item):
     def __init__(self, name: str, hp: int):
         super().__init__(name)
+        self.max_hp = hp
         self.hp = hp
+    
+    def restore(self) -> None:
+        self.hp = self.max_hp
 
 
 class NotInInventoryError(Exception): ...
