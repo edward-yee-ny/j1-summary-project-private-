@@ -54,6 +54,12 @@ class Map:
     def __init__(self):
         self._direction_history = []
 
+    def get_room(self, name: str) -> Room:
+        if not name in self.rooms:
+            raise ValueError(f"Room {name!r} does not exist.")
+        return self.rooms[name]
+    
+    def reset(self) -> None:
         items = [
             create_item(item) for item in _item_data['items']
         ]

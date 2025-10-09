@@ -130,6 +130,9 @@ class Game:
             json.dump({"moves": self.map.get_direction_history()}, f)
 
     def run(self) -> None:
+        """Runs the main game loop."""
+        # Reset map layout
+        self.map.reset()
         # functions used
         def get_room_type():
             """returns the type of room player currently is in"""
