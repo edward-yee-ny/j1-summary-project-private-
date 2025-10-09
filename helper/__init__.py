@@ -1,8 +1,20 @@
 """Helper functions for user input and validation."""
 
+import random
 from typing import Any
 
-from .extract_json import extractJson
+
+def roll_chance(chance: float) -> bool:
+    """Rolls a random chance and returns True if successful.
+    
+    Args:
+        chance (float): A float between 0 and 1 representing the chance of
+        success.
+    
+    Returns:
+        bool: True if the roll is successful, False otherwise.
+    """
+    return random.random() < chance
 
 
 def prompt_valid_choice(
