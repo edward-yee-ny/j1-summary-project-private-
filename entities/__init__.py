@@ -31,8 +31,8 @@ class Enemy(Entity):
 
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
-    def __init__(self):
-        super().__init__(1750, 200)
+    def __init__(self, hp: int, atk: int):
+        super().__init__(hp, atk)
         self.inventory = []
         self.cur_weapon = None
         self.cur_armor = None

@@ -13,11 +13,13 @@ from . import text
 BATTLE_OUTCOMES = extractJson('data/battle_outcome.json')
 DAMAGE_REPORT = extractJson('data/damage_report.json')
 SAVE_FILE_PATH = "save_state.json"
+PLAYER_HEALTH = 1750
+PLAYER_ATTACK = 200
 
 class Game:
     def __init__(self):
         self.map = Map()
-        self.player = Player()
+        self.player = Player(hp=PLAYER_HEALTH, atk=PLAYER_ATTACK)
         self.game_over = False
         self.choice = prompt_valid_choice(
             "Welcome to the game, what would you like to do?",
