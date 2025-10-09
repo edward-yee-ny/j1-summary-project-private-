@@ -1,6 +1,10 @@
 """Room types for the game environment."""
 
 
+from entities import Enemy
+from item import Item
+
+
 class Room:
     def __init__(self,
                  name: str,
@@ -62,16 +66,19 @@ class BattleRoom(Room):
     def __init__(self, name, description):
         super().__init__(name, description)
         self.enemies: list = []
-        self.rewards: list = []
+        self.reward: list = []
 
     def add_enemy(self, enemy) -> None:
         self.enemies.append(enemy)
 
     def add_reward(self, reward) -> None:
-        self.rewards.append(reward)
-
-    def get_enemies(self) -> list:
+        self.reward.append(reward)
+    
+    def get_enemies(self) -> list[Enemy]:
         return self.enemies
+
+    def get_reward(self) -> list[Item]:
+        return self.reward
 
     def display(self) -> None:
         super().display()
@@ -79,10 +86,10 @@ class BattleRoom(Room):
             print(f"Enemies: {", ".join(str(enemy) for enemy in self.enemies)}")
         else:
             print("Enemies: None")
-        if self.rewards:
-            print(f"Rewards: {", ".join(str(reward) for reward in self.rewards)}")
+        if self.reward:
+            print(f"Reward: {", ".join(str(reward) for reward in self.reward)}")
         else:
-            print("Rewards: None")
+            print("Reward: None")
 
 
 class TreasureRoom(Room):
