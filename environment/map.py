@@ -4,7 +4,7 @@ from typing import Any
 from .. import item
 from .room import Room, BattleRoom, TreasureRoom
 
-from entities.enemy import Enemy
+from entities import Enemy
 
 from helper import extractJson
 
