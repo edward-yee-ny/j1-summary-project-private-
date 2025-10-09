@@ -24,6 +24,9 @@ class Inventory:
     def __init__(self):
         self._contents: dict[str, Item] = {}
 
+    def __iter__(self) -> Iterator:
+        return iter(self._contents)
+
     def add(self, item: Item) -> bool:
         """Add an item to inventory.
 
@@ -38,6 +41,12 @@ class Inventory:
         """Returns True if the item is in inventory."""
         return item_name in self._contents
 
+    def items(self) -> list[tuple[str, Item]]:
+        return list(self._contents.items())
+
+    def keys(self) -> list[str]:
+        return list(self._contents.keys())
+
     def remove(self, item_name: str) -> bool:
         """Remove an item from inventory. 
 
@@ -47,3 +56,4 @@ class Inventory:
             return False
         del self._contents[item_name]
         return True
+
