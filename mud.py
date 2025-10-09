@@ -16,6 +16,7 @@ def open_and_dict(filename):
 
 # Define a global constant for the intro file
 INTRO_FILE = "intro.txt"
+OUTRO_FILE = "outro.txt"
 BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
 DAMAGE_REPORT = open_and_dict('data/damage_report.json')
 
