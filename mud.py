@@ -127,7 +127,7 @@ class Game:
         """Saves the current game state to a JSON file."""
         print(text.MSG_SAVE_GAME)
         with open(SAVE_FILE_PATH, "w") as f:
-            json.dump({"moves": self.map.direction_save_arr}, f)
+            json.dump({"moves": self.map.get_direction_history()}, f)
 
     def run(self) -> None:
         # functions used

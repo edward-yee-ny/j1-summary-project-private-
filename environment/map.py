@@ -54,8 +54,7 @@ def pop_random(items: list) -> Any:
 
 class Map:
     def __init__(self):
-        # saves the directions here
-        self.direction_save_arr = []
+        self._direction_history = []
 
         items = [
             create_item(item) for item in _item_data['items']
@@ -87,11 +86,12 @@ class Map:
         self.head = "Starting Room"
         self.currentRoom = self.head
 
-    def get_room(self, name: str) -> Room:
-        if not name in self.rooms:
-            raise ValueError(f"Room {name!r} does not exist.")
-        return self.rooms[name]
-        
+    def get_direction_history(self) -> list[str]:
+        return self._direction_history.copy()
+
+    def record_direction(self, direction: str) -> None:
+        self._direction_history.append(direction)
+
     def go_right(self):
         currentRoom = self.get_room(self.currentRoom)
         assert isinstance(currentRoom, Room)
@@ -102,7 +102,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.get_room(rightRoom)
-            self.direction_save_arr.append("right")
+            self.record_direction("right")
             currentRoom.display()
     
     def go_left(self):
@@ -115,7 +115,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.get_room(leftRoom)
-            self.direction_save_arr.append("left")
+            self.record_direction("left")
             currentRoom.display()
     
     def go_forward(self):
@@ -128,7 +128,7 @@ class Map:
             print("This is the last room in the game.")
         else:
             self.currentRoom = self.get_room(forwardRoom)
-            self.direction_save_arr.append('forward')
+            self.record_direction("forward")
             currentRoom.display()
         
     def displayCurrentRoom(self):
