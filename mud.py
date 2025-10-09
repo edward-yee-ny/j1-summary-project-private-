@@ -8,40 +8,10 @@ import json
 
 from helper import prompt_valid_choice
 
-# Define a global constant for the intro file
-INTRO_FILE = "intro.txt"
-OUTRO_FILE = "outro.txt"
-OPTION_NEW_GAME = "New Game"
-OPTION_LOAD_GAME = "Load Game"
-OPTION_GO_LEFT = "Go Left"
-OPTION_GO_FORWARD = "Go Forward"
-OPTION_GO_RIGHT = "Go Right"
-OPTION_EQUIP_EQUIPMENT = "Equip Equipment"
-OPTION_SAVE_GAME = "Save Game"
-OPTION_ATTACK = "Attack"
-OPTION_OPEN_INVENTORY = "Open Inventory"
-GAME_MENU_OPTIONS = [
-    OPTION_NEW_GAME,
-    OPTION_LOAD_GAME
-]
-MAIN_MENU_OPTIONS = [
-    OPTION_GO_LEFT,
-    OPTION_GO_FORWARD,
-    OPTION_GO_RIGHT,
-    OPTION_EQUIP_EQUIPMENT,
-    OPTION_SAVE_GAME
-]
-FIGHT_MENU_OPTIONS = [
-    OPTION_ATTACK,
-    OPTION_OPEN_INVENTORY
-]
+from . import text
+
 BATTLE_OUTCOMES = extractJson('data/battle_outcome.json')
 DAMAGE_REPORT = extractJson('data/damage_report.json')
-
-def load_textfile(filename):
-    """Loads the content of a text file."""
-    with open(filename, "r") as file:
-        return file.read()
 
 class Game:
     def __init__(self):
@@ -50,23 +20,22 @@ class Game:
         self.game_over = False
         self.choice = prompt_valid_choice(
             "Welcome to the game, what would you like to do?",
-            GAME_MENU_OPTIONS,
+            text.GAME_MENU_OPTIONS,
         )
 
     def run(self):
-        print(load_textfile(INTRO_FILE))
         # functions used
         def handle_menu_choice(choice: str):
             """Handles the room choice and moves into the room selected.
             Handles the choice to save game data.
             """
-            if choice == OPTION_GO_LEFT:
+            if choice == text.OPTION_GO_LEFT:
                 self.map.go_left()
-            elif choice == OPTION_GO_FORWARD:
+            elif choice == text.OPTION_GO_FORWARD:
                 self.map.go_forward()
-            elif choice == OPTION_GO_RIGHT:
+            elif choice == text.OPTION_GO_RIGHT:
                 self.map.go_right()
-            elif choice == OPTION_EQUIP_EQUIPMENT:
+            elif choice == text.OPTION_EQUIP_EQUIPMENT:
                 self.player.open_inventory()
                 try:
                     equip_choice = prompt_valid_choice(
@@ -97,11 +66,11 @@ class Game:
 
                 action = prompt_valid_choice(
                     preamble="What action do you take?",
-                    options=FIGHT_MENU_OPTIONS,
+                    options=text.FIGHT_MENU_OPTIONS,
                 )
 
                 print('')
-                if action == OPTION_ATTACK:  # player attack the enemy
+                if action == text.OPTION_ATTACK:  # player attack the enemy
                     multi, damage = self.player.calculate_atk()
                     enemy.update_hp(-damage)
 
@@ -125,7 +94,7 @@ class Game:
 
                     print(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)))
 
-                elif action == OPTION_OPEN_INVENTORY:
+                elif action == text.OPTION_OPEN_INVENTORY:
                     self.player.open_inventory()
 
                 sleep(0.6)
@@ -164,7 +133,7 @@ class Game:
 
 
         # intro
-        print(load_textfile(INTRO_FILE))
+        print(text.load_textfile(text.INTRO_FILE))
 
         # initial description of the starting room
         self.map.displayCurrentRoom()
@@ -174,7 +143,7 @@ class Game:
         while not self.game_over:
             choice = prompt_valid_choice(
                 "Choose your next action:",
-                MAIN_MENU_OPTIONS,
+                text.MAIN_MENU_OPTIONS,
             )
             handle_menu_choice(choice)
 
@@ -188,4 +157,8 @@ class Game:
             if isinstance(self.map.currentRoom, BossRoom):
                 self.game_over = True
 
-        print(load_textfile(OUTRO_FILE))
+        print(text.load_textfile(text.OUTRO_FILE))
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()
