@@ -6,7 +6,7 @@ from helper.extract_json import extractJson
 from time import sleep
 import json
 
-from helper import prompt_valid_choice
+from helper import prompt_valid_choice, random_between, roll_chance
 
 from . import text
 
@@ -26,20 +26,35 @@ class Game:
             text.GAME_MENU_OPTIONS,
         )
 
-    def calculate_atk(self, entity) -> tuple[float | int, int]:
-        """Calculates the crit chance and attack damage of an entity."""
-        multi = round(1+random.random(), 2)
-        chance = random.random()
-        if chance > 0.2: # Random chance!
-            multi = 1
-        return multi, round(multi * entity.atk)
+    def determine_attack_outcome(self, attacker, defender) -> dict:
+        """Determines the outcome of an attack between two entities.
+        
+        Args:
+            attacker: The entity initiating the attack.
+            defender: The entity defending against the attack.
 
-    def calculate_dmg(self, entity, base_dmg) -> bool:
-        """Calculates total damage based on base damage and armor reduction."""
-        # For now, just use update_hp()... maybe when the game is more complicated,
-        # add something here :)
-        entity.update_hp(-base_dmg)
-        return entity.hp <= 0
+        Returns:
+            {
+                "multiplier": float | int,
+                "damage": int,
+            }
+        """
+        if roll_chance(0.2):
+            multiplier = 2
+        else:
+            multiplier = 1 + random_between(0, 0.5, dp=2)
+        damage = self.calculate_damage(attacker)
+        return {
+            "multiplier": multiplier,
+            "damage": damage,
+        }
+
+    def calculate_damage(self, entity) -> int:
+        """Calculates the attack damage of an entity."""
+        if hasattr(entity, 'cur_weapon') and entity.cur_weapon:
+            return 200 + entity.cur_weapon.atk
+        else:
+            return entity.atk
 
     def handle_equip_choice(self, choice: str) -> None:
         """Handles the equipment choice and equips the selected item."""
@@ -78,16 +93,17 @@ class Game:
 
     def handle_fight_attack(self, enemy) -> None:
         """Handles the fight attack sequence between the player and the enemy."""
-        multi, damage = self.calculate_atk(self.player)
+        outcome = self.determine_attack_outcome(self.player, enemy)
+        multiplier = outcome["multiplier"]
+        damage = outcome["damage"]
         enemy.update_hp(-damage)
-
-        if multi > 1:
+        if multiplier > 1:
             print("Megaknight feels a crit!")
-            print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multi)))
+            print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multiplier)))
         print(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)))
         sleep(0.6)
 
-        if enemy.hp <= 0:
+        if enemy.is_dead():
             print("\n", BATTLE_OUTCOMES['Victory'])
             # gives and autoequips the reward item for the player
             reward = self.map.get_current_room().get_item()
@@ -95,7 +111,11 @@ class Game:
             print("MEGAKNIGHT: I should really equip something!")
             return
         # enemy attack the player
-        if self.calculate_dmg(enemy, enemy.atk):
+        outcome = self.determine_attack_outcome(enemy, self.player)
+        multiplier = outcome["multiplier"]
+        damage = outcome["damage"]
+        self.player.update_hp(-damage)
+        if self.player.is_dead():
             print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
             exit(1)
 
