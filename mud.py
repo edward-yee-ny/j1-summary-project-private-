@@ -14,8 +14,16 @@ def open_and_dict(filename):
     res = extractJson(data)
     return res
 
+# Define a global constant for the intro file
+INTRO_FILE = "intro.txt"
 BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
 DAMAGE_REPORT = open_and_dict('data/damage_report.json')
+
+def load_textfile(filename):
+    """Loads the content of a text file."""
+    with open(filename, "r") as file:
+        return file.read()
+
 class Game:
     def __init__(self):
         self.game = Map()
@@ -32,18 +40,10 @@ class Game:
         BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
         DAMAGE_REPORT = open_and_dict('data/damage_report.json')
 
-        print("""
-        ___                                ___     _    _                                               _   _                   _      _   
-        |  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
-        | (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     | \ ___    __     _ _   | |/'/'  ___  (_)   __  | |__  | ,_)
-        | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
-        | |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
-        (_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
-                                                                                    ( )_) |                           ( )_) |            
-                                                                                        \___/'                            \___/'            
-        """)
-        print(f"""
-        STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""")
+        # Load and display the intro from the intro.txt file
+        print(load_textfile(INTRO_FILE))
+
+        print("STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament")
         # functions used
         def prompt_room_choice():
             """
@@ -164,7 +164,7 @@ class Game:
 
 
         # intro
-        print("Welcome to the arena.",'\n', "You will assist Mega knight in competing in the tournament", '\n', "Winning each battle will give you an opportunity to choose your next opponent.", '\n', "Best of luck player")
+        print(load_textfile(INTRO_FILE))
 
         # initial description of the starting room
         game.displayCurrentRoom()
