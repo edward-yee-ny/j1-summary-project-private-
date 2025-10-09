@@ -1,8 +1,5 @@
-from .battle import BattleRoom
-from .boss import BossRoom
-from .room import Room
-from .treasure import TreasureRoom
-from .elite_battle_room import EliteBattleRoom
+from .boss import 
+from .room import Room, BattleRoom, BossRoom, EliteBattleRoom, TreasureRoom
 
 from entities.enemy import Enemy
 
@@ -46,9 +43,10 @@ class Map:
             else:
                 itemsData.append(Item(item['hp'], 0, item['name'], item['type']))
         
-        startRoom = Room('Starting Room')
-        startRoom.description = "You are in the starting room. Choose a direction to proceed."
-        
+        startRoom = Room(
+            name='Starting Room',
+            room_type='start',
+            description="You are in the starting room. Choose a direction to proceed.")
         battleRoom1 = BattleRoom('Battle Room 1')
         treasureRoom1 = TreasureRoom('Treasure Room 1')
         battleRoom2 = BattleRoom('Battle Room 2')
