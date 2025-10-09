@@ -75,7 +75,7 @@ class Game:
         if enemy.hp <= 0:
             print("\n", BATTLE_OUTCOMES['Victory'])
             # gives and autoequips the reward item for the player
-            reward = self.map.currentRoom.reward
+            reward = self.map.currentRoom.get_item()
             self.player.update_inventory(reward)
             print("MEGAKNIGHT: I should really equip something!")
             return
@@ -145,12 +145,13 @@ class Game:
             self.handle_menu_choice(choice)
 
             # check room type, handle room actions
-            if not self.map.get_current_room().isCompleted:
+            current_room = self.map.get_current_room()
+            if not current_room.isCompleted:
                 self.update_room()
-                self.map.get_current_room().set_complete()
+                current_room.set_complete()
 
             # If it's the final room, end the game.
-            if self.map.get_current_room().is_last_room():
+            if current_room.is_last_room():
                 self.game_over = True
 
         print(text.load_textfile(text.OUTRO_FILE))
