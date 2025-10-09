@@ -1,203 +1,232 @@
 # importing
 from environment.map import *
-from objects.item import Item 
-from entities.player import Player
-from environment.boss import BossRoom
+from entities import Combatant, Player
+from environment import BattleRoom, TreasureRoom, Room
 from helper.extract_json import extractJson
 from time import sleep
 import json
-from helper.pack_json import packJson
 
-def open_and_dict(filename):
-    with open(filename, 'r') as f:
-        data = f.read()
-    res = extractJson(data)
-    return res
+from helper import prompt_valid_choice, random_between, roll_chance
+from item import Item
 
-BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
-DAMAGE_REPORT = open_and_dict('data/damage_report.json')
+from . import text
+
+SAVE_FILE_PATH = "save_state.json"
+PLAYER_HEALTH = 1750
+PLAYER_ATTACK = 200
+PLAYER_CRIT_CHANCE = 0.2
+CRIT_THRESHOLD = 1.3  # multiplier threshold for crit message
+
 class Game:
     def __init__(self):
-        self.game = Map()
-        self.player = Player()
+        self.map = Map()
+        self.player = Player(
+            name="Megaknight",
+            hp=PLAYER_HEALTH,
+            atk=PLAYER_ATTACK,
+            crit_chance=PLAYER_CRIT_CHANCE
+        )
         self.game_over = False
-        self.choice = input("""
-                Welcome to the game, what would you like to do.
-                1. New Game
-                2. Load Game
-                Key in the number :
-        """)
-    def rungame(self, game, player, game_over):
+        self.choice = prompt_valid_choice(
+            "Welcome to the game, what would you like to do?",
+            text.GAME_MENU_OPTIONS,
+        )
 
-        BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
-        DAMAGE_REPORT = open_and_dict('data/damage_report.json')
+    def determine_attack_outcome(self,
+                                 attacker: Combatant,
+                                 defender: Combatant) -> dict:
+        """Determines the outcome of an attack between two entities.
+        
+        Args:
+            attacker: The entity initiating the attack.
+            defender: The entity defending against the attack.
+                      (for future use, e.g., armor/item effects)
 
-        print("""
-        ___                                ___     _    _                                               _   _                   _      _   
-        |  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
-        | (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     | \ ___    __     _ _   | |/'/'  ___  (_)   __  | |__  | ,_)
-        | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
-        | |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
-        (_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
-                                                                                    ( )_) |                           ( )_) |            
-                                                                                        \___/'                            \___/'            
-        """)
-        print(f"""
-        STAGE 1: Preliminary Rounds \nComplete these rounds to advance further in the tournament""")
-        # functions used
-        def prompt_room_choice():
-            """
-            handles the room choice and moves into the room selected
-            handles the choice to save game data
-            """
-            while True:
-                choice = input("Key in your choice of 1,2,3,4, or 5: ")
-                if choice == "1": # left
-                    game.go_left()
-                    break
-                elif choice == "2": # middle
-                    game.go_forward()
-                    break
-                elif choice == "3": # right
-                    game.go_right()
-                    break
-                elif choice == "4": # equip equipment
-                    # allows the player ot equip the equipment of their choice
-                    player.open_inventory()
-                    try:
-                        CHOICE = int(input(f"Input the index of the equipment to equip (1-indexed): "))-1
-                        player.update_equipment(player.inventory[CHOICE])
-                        print(f"Item {player.inventory[CHOICE]} has been equipped successfully!")
-                    except Exception as e:
-                        print("Invalid input.")
-                    
-                
-                elif choice == "5": # save game
-                    file_path = "save_state.json"
-                    
-                    print("\nAttempting to save the game... (MK admires your patience!)")
-                    with open(file_path, "w") as f:
-                        json.dump({"moves" : game.direction_save_arr}, f)
-                    
-                    break
-                else:
-                    print("'WHERE IS THAT?' ~Mega Knight")
-            return None
+        Returns:
+            {
+                "multiplier": float | int,
+                "damage": int,
+            }
+        """
+        if roll_chance(attacker.crit_chance):
+            multiplier = 2
+        else:
+            multiplier = 1 + random_between(0, 0.5, dp=2)
+        damage = self.calculate_damage(attacker)
+        return {
+            "multiplier": multiplier,
+            "damage": damage,
+        }
 
-        def fight(enemy):
-            player.reset_hp()
-            game_over = False
+    def calculate_damage(self, attacker: Combatant) -> int:
+        """Calculates the attack damage of a combatant."""
+        weapon = attacker.get_weapon()
+        if weapon:
+            return 200 + weapon.atk
+        else:
+            return attacker.atk
 
-            # fighting loop
-            while not game_over:
-                
-                player.display_stats()
-                enemy.display_stats()
-                
-                sleep(1.4)
+    def handle_equip_choice(self, choice: str) -> None:
+        """Handles the equipment choice and equips the selected item."""
+        self.player.equip(self.player.inventory.get(choice))
+        print(f"Item {choice} has been equipped successfully!")
 
-                action = input("\n what action do you take \n 1. attack \n 2. open inventory \n input your choice: ")
-                
-                print('')
-                if action == "1": # player attack the enemy
-                    multi, damage = player.calculate_atk()
-                    enemy.update_hp(-damage)
-                    
-                    if multi > 1:
-                        print("Megaknight feels a crit!")
-                        print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multi)))
-                    print(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)))
-                    sleep(0.6)
+    def handle_battle(self) -> None:
+        """Handles the battle sequence based on the type of battle."""
+        current_room = self.map.get_current_room()
+        assert isinstance(current_room, BattleRoom)
+        for enemy in current_room.get_enemies():
+            self.handle_fight(enemy)
 
-                    if enemy.hp <= 0:
-                        print("\n", BATTLE_OUTCOMES['Victory'])
-                        # gives and autoequips the reward item for the player
-                        reward = game.currentRoom.reward
-                        player.update_inventory(reward)
-                        print("MEGAKNIGHT: I should really equip something!")
-                        break
-                    # enemy attack the player
-                    if player.calculate_dmg(enemy.atk):
-                        print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
-                        exit(1)
-                    
-                    print(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)))
+    def handle_fight(self, enemy: Enemy) -> None:
+        """Handles the fight sequence between the player and a single enemy."""
+        self.player.restore()
+        self.game_over = False
 
-                elif action == "2":
-                    player.open_inventory()
-                else:
-                    print("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.")
-                
-                sleep(0.6)
-
-        def battle_sequence(battle_type):
-            # initialising necessary variables
-            if battle_type == "normal":
-                enemy = game.currentRoom.enemy
-                fight(enemy)
-            elif battle_type == "elite":
-                enemy1 = game.currentRoom.enemy
-                enemy2 = game.currentRoom.enemy2
-                fight(enemy1)
-                fight(enemy2)
+        # fighting loop
+        attacker = self.player
+        defender = enemy
+        victor = None
+        while victor is None:
+            attacker.display_stats()
+            defender.display_stats()
+            text.wait_long()
+            if isinstance(attacker, Player):
+                attacker_action = prompt_valid_choice(
+                    preamble="What action do you take?",
+                    options=text.FIGHT_MENU_OPTIONS,
+                )
             else:
-                boss = game.currentRoom.enemy
-                fight(boss)
+                attacker_action = text.OPTION_ATTACK
 
-            return None
+            if attacker_action == text.OPTION_ATTACK:
+                victor = self.handle_fight_attack(attacker, defender)
+            elif attacker_action == text.OPTION_OPEN_INVENTORY:
+                attacker.display_inventory()
+            text.wait_short()
 
-        def get_room_type():
-            """returns the type of room player currently is in"""
-            return game.currentRoom.room_type
+            # swap roles
+            attacker, defender = defender, attacker
 
-        def handle_room_action(room_type):
-            """depending on the type of room carries out the appropriate actions"""
+        # Victor decided
+        if isinstance(victor, Player):
+            text.linebreak()
+            print(text.OUTCOME_VICTORY)
+            reward = self.handle_fight_reward()
+            if reward:
+                print(text.MSG_PICKUP_ITEM)
+        else:
+            text.linebreak()
+            print(text.OUTCOME_DEFEAT)
+            text.linebreak()
+            print(text.OUTCOME_CONSOLATION)
+            exit(1)
 
-            if room_type == "treasure":
-                reward = game.currentRoom.item
-                player.update_inventory(reward)
-                print("\n", "A new item has been added into your inventory!")
-                player.update_equipment(reward)
-                player.open_inventory()
-            else:
-                battle_sequence(room_type)
 
+    def handle_fight_attack(self,
+                            attacker: Combatant,
+                            defender: Combatant) -> Combatant | None:
+        """Handles the fight attack sequence between an attacker and defender.
+        
+        Player attacks first, then enemy attacks if still alive.
+        Returns the victor (Player or Enemy).
+        """
+        outcome = self.determine_attack_outcome(attacker, defender)
+        defender.take_damage(outcome["damage"])
+        self.report_attack_outcome(attacker, defender, outcome)
+        return attacker if defender.is_dead() else None
+
+    def handle_fight_reward(self) -> list[Item]:
+        """Handles the reward sequence after a fight."""
+        room = self.map.get_current_room()
+        assert isinstance(room, BattleRoom)
+        reward = room.get_reward()
+        if reward:
+            for item in reward:
+                self.player.take_item(item)
+        return reward
+
+    def report_attack_outcome(self,
+                              attacker: Combatant,
+                              defender: Combatant,
+                              outcome: dict) -> None:
+        """Handles the outcome of an attack."""
+        multiplier = outcome["multiplier"]
+        damage = outcome["damage"]
+        if multiplier >= CRIT_THRESHOLD:
+            text.fight_report_crit(attacker.name, multiplier)
+        text.fight_report_damage(attacker.name, defender.name, damage)
+        text.wait_short()
+
+    def handle_menu_choice(self, choice: str) -> None:
+        """Handles the room choice and moves into the room selected.
+        Handles the choice to save game data.
+        """
+        if choice == text.OPTION_GO_LEFT:
+            self.map.go_left()
+        elif choice == text.OPTION_GO_FORWARD:
+            self.map.go_forward()
+        elif choice == text.OPTION_GO_RIGHT:
+            self.map.go_right()
+        elif choice == text.OPTION_EQUIP_EQUIPMENT:
+            self.player.display_inventory()
+            equip_choice = prompt_valid_choice(
+                preamble="Select equipment to equip.",
+                options=[str(item) for item in self.player.inventory],
+            )
+            self.handle_equip_choice(equip_choice)
+        elif choice == text.OPTION_SAVE_GAME:
+            self.handle_savegame()
+
+    def update_room(self) -> None:
+        """Handles the room choice and the actions within the room."""
+        current_room = self.map.get_current_room()
+        if isinstance(current_room, TreasureRoom):
+            reward = current_room.get_item()
+            self.player.take_item(reward)
+            print("\n", "A new item has been added into your inventory!")
+            self.player.display_inventory()
+        elif isinstance(current_room, BattleRoom):
+            self.handle_battle()
+        current_room.set_complete()
+
+    def handle_savegame(self) -> None:
+        """Saves the current game state to a JSON file."""
+        print(text.MSG_SAVE_GAME)
+        with open(SAVE_FILE_PATH, "w") as f:
+            json.dump({"moves": self.map.get_direction_history()}, f)
+
+    def run(self) -> None:
+        """Runs the main game loop."""
+        # Reset map layout
+        self.map.reset()
 
         # intro
-        print("Welcome to the arena.",'\n', "You will assist Mega knight in competing in the tournament", '\n', "Winning each battle will give you an opportunity to choose your next opponent.", '\n', "Best of luck player")
+        print(text.load_textfile(text.INTRO_FILE))
 
         # initial description of the starting room
-        game.displayCurrentRoom()
-        game.currentRoom.isCompleted = True
+        self.map.displayCurrentRoom()
 
-        #game running code
-        while not game_over:
-            # display possible paths
-            print("Pick a direction to move in \n 1. Left \n 2. Middle \n 3. Right \n 4. Equip equipment \n 5. Save")
-            
-            # get the choice and move into the chosen room
-            prompt_room_choice()
+        # main loop
+        while not self.game_over:
+            choice = prompt_valid_choice(
+                "Choose your next action:",
+                text.MAIN_MENU_OPTIONS,
+            )
+            self.handle_menu_choice(choice)
 
             # check room type, handle room actions
-            if not game.currentRoom.isCompleted:
-                room_type = get_room_type()
-                handle_room_action(room_type)
-                game.currentRoom.isCompleted = True
-            
-            # If it's a BossRoom completed, end the game.
-            if isinstance(game.currentRoom, BossRoom):
-                game_over = True
+            current_room = self.map.get_current_room()
+            if not current_room.isCompleted:
+                self.update_room()
+                current_room.set_complete()
 
-        print("\n You have completed the dungeon!! :)","\n","We hope you come back again...")
-    if choice == "1":
-        self.rungame(self.game, self.player, self.game_over)
-    elif choice == "2":
-        current = self.game.currentRoom
-        for i in open_and_dict("save_state.json")["moves"]:
-            if i == "forward":
-                current = current.forward
-            elif i == "right":
-                current = current.right
-            else:
-                current = current.left
-game = Game()
+            # If it's the final room, end the game.
+            if current_room.is_last_room():
+                self.game_over = True
+
+        print(text.load_textfile(text.OUTRO_FILE))
+
+if __name__ == "__main__":
+    game = Game()
+    game.run()

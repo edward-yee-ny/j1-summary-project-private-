@@ -1,0 +1,16 @@
+    ___                                ___     _    _                                               _   _                   _      _   
+    |  _`\\  _                         /'___)   ( )_ ( )              /'\_/`\                        ( ) ( )        _        ( )    ( )_ 
+    | (_) )(_)  ___    __        _   | (__     | ,_)| |__     __     |     | \ ___    __     _ _   | |/'/'  ___  (_)   __  | |__  | ,_)
+    | ,  / | |/',__) /'__`\    /'_`\ | ,__)    | |  |  _ `\ /'__`\   | (_) | /'__`\ /'_ `\ /'_` )   | , <  /' _ `\| | /'_ `\|  _ `\| |  
+    | |\ \ | |\__, \(  ___/   ( (_) )| |       | |_ | | | |(  ___/   | | | |(  ___/( (_) |( (_| |   | |\`\ | ( ) || |( (_) || | | || |_ 
+    (_) (_)(_)(____/`\____)   `\___/'(_)       `\__)(_) (_)`\____)   (_) (_)`\____)`\__  |`\__,_)   (_) (_)(_) (_)(_)`\__  |(_) (_)`\__)
+                                                                                ( )_) |                           ( )_) |            
+                                                                                    \___/'                            \___/'
+
+STAGE 1: Preliminary Rounds
+Complete these rounds to advance further in the tournament.
+
+Welcome to the arena.
+You will assist Mega knight in competing in the tournament.
+Winning each battle will give you an opportunity to choose your next opponent.
+Best of luck player.

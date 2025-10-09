@@ -1,7 +1,7 @@
 import unittest
 from entities.player import Player, ARMOR, WEAPON
 from entities.enemy import Enemy
-from objects.item import Item
+from item import Item
 from environment.battle import BattleRoom
 from environment.boss import BossRoom
 from environment.elite_battle_room import EliteBattleRoom
