@@ -1,4 +1,7 @@
-from item import Item
+import random
+
+from item import Inventory, Item
+
 
 class Entity:
     """An Entity class."""
@@ -33,7 +36,7 @@ class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
     def __init__(self, hp: int, atk: int):
         super().__init__(hp, atk)
-        self.inventory = []
+        self.inventory = Inventory()
         self.cur_weapon = None
         self.cur_armor = None
     
@@ -58,24 +61,6 @@ class Player(Entity):
         """Updates the current inventory. RIGHT NOW, ONLY ADDS ITEM."""
         self.inventory.add(item)
         return
-    
-    def calculate_atk(self) -> int:
-        """Calculates the attack that this Player should deal."""
-        multi = round(1+random(), 2)
-        chance = random()
-        
-        if chance > 0.2: # Random chance!
-            multi = 1
-        
-        
-        return multi, round(multi * self.atk) # Fist? As if!!
-    
-    def calculate_dmg(self, base_dmg):
-        """Calculates total damage based on base damage and armor reduction."""
-        # For now, just use update_hp()... maybe when the game is more complicated,
-        # add something here :)
-        self.update_hp(-base_dmg)
-        return self.hp <= 0
     
     def update_equipment(self, item: Item):
         """Updates the equipment."""

@@ -26,6 +26,21 @@ class Game:
             text.GAME_MENU_OPTIONS,
         )
 
+    def calculate_atk(self, entity) -> tuple[float | int, int]:
+        """Calculates the crit chance and attack damage of an entity."""
+        multi = round(1+random.random(), 2)
+        chance = random.random()
+        if chance > 0.2: # Random chance!
+            multi = 1
+        return multi, round(multi * entity.atk)
+
+    def calculate_dmg(self, entity, base_dmg) -> bool:
+        """Calculates total damage based on base damage and armor reduction."""
+        # For now, just use update_hp()... maybe when the game is more complicated,
+        # add something here :)
+        entity.update_hp(-base_dmg)
+        return entity.hp <= 0
+
     def handle_equip_choice(self, choice: str) -> None:
         """Handles the equipment choice and equips the selected item."""
         self.player.update_equipment(self.player.inventory[self.player.inventory.index(choice)])
@@ -63,7 +78,7 @@ class Game:
 
     def handle_fight_attack(self, enemy) -> None:
         """Handles the fight attack sequence between the player and the enemy."""
-        multi, damage = self.player.calculate_atk()
+        multi, damage = self.calculate_atk(self.player)
         enemy.update_hp(-damage)
 
         if multi > 1:
@@ -75,12 +90,12 @@ class Game:
         if enemy.hp <= 0:
             print("\n", BATTLE_OUTCOMES['Victory'])
             # gives and autoequips the reward item for the player
-            reward = self.map.currentRoom.get_item()
+            reward = self.map.get_current_room().get_item()
             self.player.update_inventory(reward)
             print("MEGAKNIGHT: I should really equip something!")
             return
         # enemy attack the player
-        if self.player.calculate_dmg(enemy.atk):
+        if self.calculate_dmg(enemy, enemy.atk):
             print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
             exit(1)
 
