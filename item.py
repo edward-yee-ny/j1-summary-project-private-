@@ -18,3 +18,32 @@ class Armor(Item):
     def __init__(self, name: str, hp: int):
         super().__init__(name)
         self.hp = hp
+
+
+class Inventory:
+    def __init__(self):
+        self._contents: dict[str, Item] = {}
+
+    def add(self, item: Item) -> bool:
+        """Add an item to inventory.
+
+        Returns a bool representing success or failure.
+        """
+        if self.has(item.name):
+            return False
+        self._contents[item.name] = item
+        return True
+
+    def has(self, item_name: str) -> bool:
+        """Returns True if the item is in inventory."""
+        return item_name in self._contents
+
+    def remove(self, item_name: str) -> bool:
+        """Remove an item from inventory. 
+
+        Returns a bool representing success or failure. 
+        """
+        if not self.has(item_name):
+            return False
+        del self._contents[item_name]
+        return True
