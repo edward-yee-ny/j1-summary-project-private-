@@ -4,6 +4,29 @@ import random
 from typing import Any
 
 
+def random_between(
+        min_val: float | int,
+        max_val: float | int,
+        dp: int = 2
+) -> float:
+    """Generates a random float between min_val and max_val with specified decimal places.
+
+    Args:
+        min_val (int): The minimum value (inclusive).
+        max_val (int): The maximum value (inclusive).
+        dp (int): Number of decimal places. Defaults to 2.
+
+    Returns:
+        float: A random float between min_val and max_val rounded to dp decimal places.
+    """
+    if min_val > max_val:
+        raise ValueError("min_val must be less than or equal to max_val")
+    if dp < 0:
+        raise ValueError("dp must be a non-negative integer")
+    value = random.uniform(min_val, max_val)
+    return round(value, dp)
+
+
 def roll_chance(chance: float) -> bool:
     """Rolls a random chance and returns True if successful.
     
