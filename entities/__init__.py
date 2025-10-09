@@ -11,6 +11,10 @@ class Entity:
     
     def display_stats(self) -> None:
         print(f"""HP: {self.hp} ATK: {self.atk}""")
+
+    def is_dead(self) -> bool:
+        """Returns True if entity is dead, False otherwise."""
+        return self.hp <= 0
     
     def update_hp(self, difference):
         """Updates HP of entity by difference. To damage, difference < 0."""
