@@ -53,6 +53,7 @@ def pop_random(items: list) -> Any:
 class Map:
     def __init__(self):
         self._direction_history = []
+        self.currentRoom = "Starting Room"
 
     def get_room(self, name: str) -> Room:
         if not name in self.rooms:
@@ -87,8 +88,7 @@ class Map:
                     room.set_item(item)
             self.rooms[name] = room
 
-        self.head = "Starting Room"
-        self.currentRoom = self.head
+        self.currentRoom = "Starting Room"
 
     def get_direction_history(self) -> list[str]:
         return self._direction_history.copy()
@@ -96,45 +96,38 @@ class Map:
     def record_direction(self, direction: str) -> None:
         self._direction_history.append(direction)
 
+    def go_direction(self, direction: str) -> None:
+        currentRoom = self.get_room(self.currentRoom)
+        if currentRoom.is_last_room():
+            print("This is the last room in the game.")
+            return
+        elif direction == "left":
+            nextRoom = currentRoom.get_left()
+        elif direction == "right":
+            nextRoom = currentRoom.get_right()
+        elif direction == "forward":
+            nextRoom = currentRoom.get_forward()
+        else:
+            raise ValueError(f"Unknown direction: {direction}")
+        if nextRoom is None:
+            if direction == "forward":
+                print("No room lies ahead.")
+            else:
+                print(f"No room lies to the {direction}.")
+            return
+        self.currentRoom = nextRoom
+        self.record_direction(direction)
+        self.get_room(self.currentRoom).display()
+
     def go_right(self):
-        currentRoom = self.get_room(self.currentRoom)
-        assert isinstance(currentRoom, Room)
-        rightRoom = currentRoom.get_right()
-        if rightRoom is None:
-            print("No room lies to the right.")
-        elif currentRoom.is_last_room():
-            print("This is the last room in the game.")
-        else:
-            self.currentRoom = self.get_room(rightRoom)
-            self.record_direction("right")
-            currentRoom.display()
-    
+        self.go_direction("right")
+
     def go_left(self):
-        currentRoom = self.get_room(self.currentRoom)
-        assert isinstance(currentRoom, Room)
-        leftRoom = currentRoom.get_left()
-        if leftRoom is None:
-            print("No room lies to the left.")
-        elif currentRoom.is_last_room():
-            print("This is the last room in the game.")
-        else:
-            self.currentRoom = self.get_room(leftRoom)
-            self.record_direction("left")
-            currentRoom.display()
-    
+        self.go_direction("left")
+
     def go_forward(self):
-        currentRoom = self.get_room(self.currentRoom)
-        assert isinstance(currentRoom, Room)
-        forwardRoom = currentRoom.get_forward()
-        if forwardRoom is None:
-            print("No room lies forward.")
-        elif currentRoom.is_last_room():
-            print("This is the last room in the game.")
-        else:
-            self.currentRoom = self.get_room(forwardRoom)
-            self.record_direction("forward")
-            currentRoom.display()
-        
+        self.go_direction("forward")
+
     def displayCurrentRoom(self):
         currentRoom = self.get_room(self.currentRoom)
         currentRoom.display()
