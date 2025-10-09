@@ -1,12 +1,13 @@
 # importing
 from environment.map import *
-from entities import Player
+from entities import Combatant, Player
 from environment import BattleRoom, TreasureRoom, Room
 from helper.extract_json import extractJson
 from time import sleep
 import json
 
 from helper import prompt_valid_choice, random_between, roll_chance
+from item import Item
 
 from . import text
 
@@ -15,23 +16,33 @@ DAMAGE_REPORT = extractJson('data/damage_report.json')
 SAVE_FILE_PATH = "save_state.json"
 PLAYER_HEALTH = 1750
 PLAYER_ATTACK = 200
+PLAYER_CRIT_CHANCE = 0.2
+CRIT_THRESHOLD = 1.3  # multiplier threshold for crit message
 
 class Game:
     def __init__(self):
         self.map = Map()
-        self.player = Player(hp=PLAYER_HEALTH, atk=PLAYER_ATTACK)
+        self.player = Player(
+            name="Megaknight",
+            hp=PLAYER_HEALTH,
+            atk=PLAYER_ATTACK,
+            crit_chance=PLAYER_CRIT_CHANCE
+        )
         self.game_over = False
         self.choice = prompt_valid_choice(
             "Welcome to the game, what would you like to do?",
             text.GAME_MENU_OPTIONS,
         )
 
-    def determine_attack_outcome(self, attacker, defender) -> dict:
+    def determine_attack_outcome(self,
+                                 attacker: Combatant,
+                                 defender: Combatant) -> dict:
         """Determines the outcome of an attack between two entities.
         
         Args:
             attacker: The entity initiating the attack.
             defender: The entity defending against the attack.
+                      (for future use, e.g., armor/item effects)
 
         Returns:
             {
@@ -39,7 +50,7 @@ class Game:
                 "damage": int,
             }
         """
-        if roll_chance(0.2):
+        if roll_chance(attacker.crit_chance):
             multiplier = 2
         else:
             multiplier = 1 + random_between(0, 0.5, dp=2)
@@ -49,16 +60,17 @@ class Game:
             "damage": damage,
         }
 
-    def calculate_damage(self, entity) -> int:
-        """Calculates the attack damage of an entity."""
-        if hasattr(entity, 'cur_weapon') and entity.cur_weapon:
-            return 200 + entity.cur_weapon.atk
+    def calculate_damage(self, attacker: Combatant) -> int:
+        """Calculates the attack damage of a combatant."""
+        weapon = attacker.get_weapon()
+        if weapon:
+            return 200 + weapon.atk
         else:
-            return entity.atk
+            return attacker.atk
 
     def handle_equip_choice(self, choice: str) -> None:
         """Handles the equipment choice and equips the selected item."""
-        self.player.update_equipment(self.player.inventory[self.player.inventory.index(choice)])
+        self.player.equip(self.player.inventory.get(choice))
         print(f"Item {choice} has been equipped successfully!")
 
     def handle_battle(self) -> None:
@@ -68,58 +80,85 @@ class Game:
         for enemy in current_room.get_enemies():
             self.handle_fight(enemy)
 
-    def handle_fight(self, enemy) -> None:
-        self.player.reset_hp()
+    def handle_fight(self, enemy: Enemy) -> None:
+        """Handles the fight sequence between the player and a single enemy."""
+        self.player.restore()
         self.game_over = False
 
         # fighting loop
-        while not self.game_over:
-            self.player.display_stats()
-            enemy.display_stats()
-            sleep(1.4)
+        attacker = self.player
+        defender = enemy
+        victor = None
+        while victor is None:
+            attacker.display_stats()
+            defender.display_stats()
+            text.wait_long()
+            if isinstance(attacker, Player):
+                attacker_action = prompt_valid_choice(
+                    preamble="What action do you take?",
+                    options=text.FIGHT_MENU_OPTIONS,
+                )
+            else:
+                attacker_action = text.OPTION_ATTACK
 
-            action = prompt_valid_choice(
-                preamble="What action do you take?",
-                options=text.FIGHT_MENU_OPTIONS,
-            )
-            print('')
+            if attacker_action == text.OPTION_ATTACK:
+                victor = self.handle_fight_attack(attacker, defender)
+            elif attacker_action == text.OPTION_OPEN_INVENTORY:
+                attacker.display_inventory()
+            text.wait_short()
 
-            if action == text.OPTION_ATTACK:
-                self.handle_fight_attack(enemy)
-            elif action == text.OPTION_OPEN_INVENTORY:
-                self.player.display_inventory()
+            # swap roles
+            attacker, defender = defender, attacker
 
-            sleep(0.6)
-
-    def handle_fight_attack(self, enemy) -> None:
-        """Handles the fight attack sequence between the player and the enemy."""
-        outcome = self.determine_attack_outcome(self.player, enemy)
-        multiplier = outcome["multiplier"]
-        damage = outcome["damage"]
-        enemy.update_hp(-damage)
-        if multiplier > 1:
-            print("Megaknight feels a crit!")
-            print(DAMAGE_REPORT['Damage_Report']['Description'].replace("(multiplier)", str(multiplier)))
-        print(DAMAGE_REPORT['Damage_Report']['Damage_Dealt'].replace("(dmg)", str(damage)))
-        sleep(0.6)
-
-        if enemy.is_dead():
-            print("\n", BATTLE_OUTCOMES['Victory'])
-            # gives and autoequips the reward item for the player
-            reward = self.map.get_current_room().get_item()
-            self.player.update_inventory(reward)
-            print("MEGAKNIGHT: I should really equip something!")
-            return
-        # enemy attack the player
-        outcome = self.determine_attack_outcome(enemy, self.player)
-        multiplier = outcome["multiplier"]
-        damage = outcome["damage"]
-        self.player.update_hp(-damage)
-        if self.player.is_dead():
-            print("\n", BATTLE_OUTCOMES["Defeat"], '\n', BATTLE_OUTCOMES["Consolation"])
+        # Victor decided
+        if isinstance(victor, Player):
+            text.linebreak()
+            print(text.OUTCOME_VICTORY)
+            reward = self.handle_fight_reward()
+            if reward:
+                print(text.MSG_PICKUP_ITEM)
+        else:
+            text.linebreak()
+            print(text.OUTCOME_DEFEAT)
+            text.linebreak()
+            print(text.OUTCOME_CONSOLATION)
             exit(1)
 
-        print(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)))
+
+    def handle_fight_attack(self,
+                            attacker: Combatant,
+                            defender: Combatant) -> Combatant | None:
+        """Handles the fight attack sequence between an attacker and defender.
+        
+        Player attacks first, then enemy attacks if still alive.
+        Returns the victor (Player or Enemy).
+        """
+        outcome = self.determine_attack_outcome(attacker, defender)
+        defender.take_damage(outcome["damage"])
+        self.report_attack_outcome(attacker, defender, outcome)
+        return attacker if defender.is_dead() else None
+
+    def handle_fight_reward(self) -> list[Item]:
+        """Handles the reward sequence after a fight."""
+        room = self.map.get_current_room()
+        assert isinstance(room, BattleRoom)
+        reward = room.get_reward()
+        if reward:
+            for item in reward:
+                self.player.update_inventory(item)
+        return reward
+
+    def report_attack_outcome(self,
+                              attacker: Combatant,
+                              defender: Combatant,
+                              outcome: dict) -> None:
+        """Handles the outcome of an attack."""
+        multiplier = outcome["multiplier"]
+        damage = outcome["damage"]
+        if multiplier >= CRIT_THRESHOLD:
+            text.fight_report_crit(attacker.name, multiplier)
+        text.fight_report_damage(attacker.name, defender.name, damage)
+        text.wait_short()
 
     def handle_menu_choice(self, choice: str) -> None:
         """Handles the room choice and moves into the room selected.
