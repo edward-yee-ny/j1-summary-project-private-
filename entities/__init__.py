@@ -109,7 +109,7 @@ class Player(Combatant):
         """Prints out the current items stored in a player's inventory."""
         print("Your current items:", ", ".join(self.inventory))
 
-    def update_inventory(self, item: Item) -> None:
+    def take_item(self, item: Item) -> None:
         """Updates the current inventory. RIGHT NOW, ONLY ADDS ITEM."""
         self.inventory.add(item)
 

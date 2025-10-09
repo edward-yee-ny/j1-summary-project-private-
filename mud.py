@@ -11,8 +11,6 @@ from item import Item
 
 from . import text
 
-BATTLE_OUTCOMES = extractJson('data/battle_outcome.json')
-DAMAGE_REPORT = extractJson('data/damage_report.json')
 SAVE_FILE_PATH = "save_state.json"
 PLAYER_HEALTH = 1750
 PLAYER_ATTACK = 200
@@ -145,7 +143,7 @@ class Game:
         reward = room.get_reward()
         if reward:
             for item in reward:
-                self.player.update_inventory(item)
+                self.player.take_item(item)
         return reward
 
     def report_attack_outcome(self,
@@ -185,9 +183,8 @@ class Game:
         current_room = self.map.get_current_room()
         if isinstance(current_room, TreasureRoom):
             reward = current_room.get_item()
-            self.player.update_inventory(reward)
+            self.player.take_item(reward)
             print("\n", "A new item has been added into your inventory!")
-            self.player.update_equipment(reward)
             self.player.display_inventory()
         elif isinstance(current_room, BattleRoom):
             self.handle_battle()

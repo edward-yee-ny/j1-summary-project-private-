@@ -98,10 +98,10 @@ class TreasureRoom(Room):
         super().__init__(name, description)
         self.item = None
 
-    def get_item(self):
+    def get_item(self) -> Item | None:
         return self.item
 
-    def set_item(self, item) -> None:
+    def set_item(self, item: Item) -> None:
         self.item = item
 
     def display(self):
