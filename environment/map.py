@@ -6,8 +6,6 @@ from .room import Room, BattleRoom, TreasureRoom
 
 from entities.enemy import Enemy
 
-from helper.shuffle_positions import shuffleListPositions
-
 from helper import extractJson
 
 _room_data = extractJson('data/rooms.json')
