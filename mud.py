@@ -1,7 +1,7 @@
 # importing
 from environment.map import *
-from entities.player import Player
-from environment.boss import BossRoom
+from entities import Player
+from environment import BattleRoom, TreasureRoom, Room
 from helper.extract_json import extractJson
 from time import sleep
 import json
@@ -29,20 +29,12 @@ class Game:
         self.player.update_equipment(self.player.inventory[self.player.inventory.index(choice)])
         print(f"Item {choice} has been equipped successfully!")
 
-    def handle_battle(self, battle_type) -> None:
+    def handle_battle(self) -> None:
         """Handles the battle sequence based on the type of battle."""
-        # initialising necessary variables
-        if battle_type == "normal":
-            enemy = self.map.currentRoom.enemy
+        current_room = self.map.get_current_room()
+        assert isinstance(current_room, BattleRoom)
+        for enemy in current_room.get_enemies():
             self.handle_fight(enemy)
-        elif battle_type == "elite":
-            enemy1 = self.map.currentRoom.enemy
-            enemy2 = self.map.currentRoom.enemy2
-            self.handle_fight(enemy1)
-            self.handle_fight(enemy2)
-        else:
-            boss = self.map.currentRoom.enemy
-            self.handle_fight(boss)
 
     def handle_fight(self, enemy) -> None:
         self.player.reset_hp()
@@ -112,16 +104,18 @@ class Game:
         elif choice == text.OPTION_SAVE_GAME:
             self.handle_savegame()
 
-    def handle_room_choice(self, room_type) -> None:
+    def update_room(self) -> None:
         """Handles the room choice and the actions within the room."""
-        if room_type == "treasure":
-            reward = self.map.currentRoom.item
+        current_room = self.map.get_current_room()
+        if isinstance(current_room, TreasureRoom):
+            reward = current_room.get_item()
             self.player.update_inventory(reward)
             print("\n", "A new item has been added into your inventory!")
             self.player.update_equipment(reward)
             self.player.display_inventory()
-        else:
-            self.handle_battle(room_type)
+        elif isinstance(current_room, BattleRoom):
+            self.handle_battle()
+        current_room.set_complete()
 
     def handle_savegame(self) -> None:
         """Saves the current game state to a JSON file."""
@@ -133,17 +127,12 @@ class Game:
         """Runs the main game loop."""
         # Reset map layout
         self.map.reset()
-        # functions used
-        def get_room_type():
-            """returns the type of room player currently is in"""
-            return self.map.currentRoom.room_type
 
         # intro
         print(text.load_textfile(text.INTRO_FILE))
 
         # initial description of the starting room
         self.map.displayCurrentRoom()
-        self.map.currentRoom.isCompleted = True
 
         # main loop
         while not self.game_over:
@@ -154,13 +143,12 @@ class Game:
             self.handle_menu_choice(choice)
 
             # check room type, handle room actions
-            if not self.map.currentRoom.isCompleted:
-                room_type = get_room_type()
-                self.handle_room_choice(room_type)
-                self.map.currentRoom.isCompleted = True
+            if not self.map.get_current_room().isCompleted:
+                self.update_room()
+                self.map.get_current_room().set_complete()
 
-            # If it's a BossRoom completed, end the game.
-            if isinstance(self.map.currentRoom, BossRoom):
+            # If it's the final room, end the game.
+            if self.map.get_current_room().is_last_room():
                 self.game_over = True
 
         print(text.load_textfile(text.OUTRO_FILE))

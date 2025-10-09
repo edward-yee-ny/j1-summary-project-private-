@@ -59,6 +59,9 @@ class Map:
         if not name in self.rooms:
             raise ValueError(f"Room {name!r} does not exist.")
         return self.rooms[name]
+
+    def get_current_room(self) -> Room:
+        return self.get_room(self.currentRoom)
     
     def reset(self) -> None:
         items = [
@@ -128,8 +131,8 @@ class Map:
     def go_forward(self):
         self.go_direction("forward")
 
-    def displayCurrentRoom(self):
-        currentRoom = self.get_room(self.currentRoom)
+    def displayCurrentRoom(self) -> None:
+        currentRoom = self.get_current_room()
         currentRoom.display()
     
     

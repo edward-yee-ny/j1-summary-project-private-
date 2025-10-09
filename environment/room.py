@@ -24,6 +24,9 @@ class Room:
                     raise ValueError(f"Invalid direction: {direction!r}")
                 self.rooms[direction] = room_name
 
+    def set_complete(self) -> None:
+        self.isCompleted = True
+
     def get_forward(self) -> str | None:
         return self.rooms["forward"]
 
@@ -66,6 +69,9 @@ class BattleRoom(Room):
 
     def add_reward(self, reward) -> None:
         self.rewards.append(reward)
+
+    def get_enemies(self) -> list:
+        return self.enemies
 
     def display(self) -> None:
         super().display()
