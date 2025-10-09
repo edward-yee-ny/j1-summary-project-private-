@@ -1,4 +1,4 @@
-from objects.item import Item
+from item import Item
 
 class Entity:
     """An Entity class. Should have health, attack and some basic information."""

@@ -1,9 +1,10 @@
+import random
+from typing import Any
+
+from .. import item
 from .room import Room, BattleRoom, TreasureRoom
 
 from entities.enemy import Enemy
-
-from objects.item import Item
-from objects.item import WEAPON, ARMOR
 
 from helper.shuffle_positions import shuffleListPositions
 
@@ -13,7 +14,26 @@ _room_data = extractJson('data/rooms.json')
 _item_data = extractJson('data/items.json')
 _monster_data = extractJson('data/monsters.json')
 
+def create_item(data: dict[str, Any]) -> item.Item:
+    """Creates an item (Weapon or Armor) based on the provided data."""
+    if data['type'] == item.WEAPON:
+        return item.Weapon(name=data['name'], atk=data['atk'])
+    elif data['type'] == item.ARMOR:
+        return item.Armor(name=data['name'], hp=data['hp'])
+    else:
+        raise ValueError(f"Unknown item type: {data['type']}")
+
+def create_monster(data: dict[str, Any]) -> Enemy:
+    """Creates an Enemy based on the provided data."""
+    return Enemy(
+        hp=data['hp'],
+        atk=data['atk'],
+        name=data['name'],
+        enemy_type=data['type']
+    )
+
 def create_room(name: str) -> Room:
+    """Creates a Room (Room, BattleRoom, or TreasureRoom) based on the provided name."""
     data = _room_data[name]
     room_type = data["type"]
     description = data["description"]    
@@ -24,47 +44,45 @@ def create_room(name: str) -> Room:
     else:
         return Room(name, description)
 
+def pop_random(items: list) -> Any:
+    """Removes and returns a random item from the list."""
+    if not items:
+        raise ValueError("items is empty")
+    index = random.randrange(len(items))
+    return items.pop(index)
+
+
 class Map:
     def __init__(self):
         # saves the directions here
         self.direction_save_arr = []
-        monsterData = {}
-        itemsData = {}
 
-        monsterData = extractJson('data/monsters.json')
-
-        itemsData = extractJson('data/items.json')
-        
-        basicEnemiesRaw = monsterData['basic_enemies']
-        eliteEnemiesRaw = monsterData['elite_enemies']
-        
-        basicEnemies = []
-        eliteEnemies = []
-        
-        for enemy in basicEnemiesRaw:
-            basicEnemies.append(Enemy(enemy['hp'], enemy['atk'], enemy['name'], 'basic'))
-            
-        for enemy in eliteEnemiesRaw:
-            eliteEnemies.append(Enemy(enemy['hp'], enemy['atk'], enemy['name'], 'elite'))
-        
-        itemsDataRaw = itemsData['items']
-        
-        itemsData = []
-        
-        for item in itemsDataRaw:
-            if item['type'] == WEAPON:
-                itemsData.append(Item(0, item['atk'], item['name'], item['type']))
-            else:
-                itemsData.append(Item(item['hp'], 0, item['name'], item['type']))
+        items = [
+            create_item(item) for item in _item_data['items']
+        ]
+        basicEnemies = [
+            create_monster(enemy) for enemy in _monster_data['basic_enemies']
+        ]
+        eliteEnemies = [
+            create_monster(enemy) for enemy in _monster_data['elite_enemies']
+        ]
         
         self.rooms: dict[str, Room] = {}
-        for name in _room_data:
+        for name, data in _room_data.items():
             room = create_room(name)
+            if isinstance(room, BattleRoom):
+                room_type = data["type"]
+                for _ in range(data["enemies"]):
+                    if room_type in ("elite", "boss"):
+                        enemy = pop_random(eliteEnemies)
+                    else:
+                        enemy = pop_random(basicEnemies)
+                    room.add_enemy(enemy)
+            if isinstance(room, TreasureRoom):
+                for _ in range(data["rewards"]):
+                    item = pop_random(items)
+                    room.set_item(item)
             self.rooms[name] = room
-
-        basicEnemyIndexes = shuffleListPositions(list(range(len(basicEnemies))))
-        eliteEnemyIndexes = shuffleListPositions(list(range(len(eliteEnemies))))
-        itemIndexes = shuffleListPositions(list(range(len(itemsData))))
 
         self.head = "Starting Room"
         self.currentRoom = self.head

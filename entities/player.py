@@ -1,6 +1,6 @@
 from random import random
 from entities.entity import Entity
-from objects.item import Item, ARMOR, WEAPON
+from item import Item, ARMOR, WEAPON
 
 class Player(Entity):
     """The Player character. Several methods to manipulate inventory and weapon."""
