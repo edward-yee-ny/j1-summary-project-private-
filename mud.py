@@ -188,16 +188,4 @@ class Game:
             if isinstance(game.currentRoom, BossRoom):
                 game_over = True
 
-        print("\n You have completed the dungeon!! :)","\n","We hope you come back again...")
-    if choice == "1":
-        self.rungame(self.game, self.player, self.game_over)
-    elif choice == "2":
-        current = self.game.currentRoom
-        for i in open_and_dict("save_state.json")["moves"]:
-            if i == "forward":
-                current = current.forward
-            elif i == "right":
-                current = current.right
-            else:
-                current = current.left
-game = Game()
+        print(load_textfile(OUTRO_FILE))
