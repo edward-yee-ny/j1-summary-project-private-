@@ -22,7 +22,7 @@ class Player(Entity):
         
         return
     
-    def open_inventory(self):
+    def display_inventory(self):
         """Prints out the current items stored in a player's inventory."""
         print("Your current items:", self.inventory)
         return

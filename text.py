@@ -2,6 +2,7 @@
 
 INTRO_FILE = "intro.txt"
 OUTRO_FILE = "outro.txt"
+
 OPTION_NEW_GAME = "New Game"
 OPTION_LOAD_GAME = "Load Game"
 OPTION_GO_LEFT = "Go Left"
@@ -11,6 +12,9 @@ OPTION_EQUIP_EQUIPMENT = "Equip Equipment"
 OPTION_SAVE_GAME = "Save Game"
 OPTION_ATTACK = "Attack"
 OPTION_OPEN_INVENTORY = "Open Inventory"
+
+MSG_SAVE_GAME = "Attempting to save the game... (MK admires your patience!)"
+
 GAME_MENU_OPTIONS = [
     OPTION_NEW_GAME,
     OPTION_LOAD_GAME

@@ -81,7 +81,7 @@ def prompt_room_choice():
             break
         elif choice == "4": # equip equipment
             # allows the player ot equip the equipment of their choice
-            player.open_inventory()
+            player.display_inventory()
             try:
                 CHOICE = int(input(f"Input the index of the equipment to equip (1-indexed): "))-1
                 player.update_equipment(player.inventory[CHOICE])
@@ -142,7 +142,7 @@ def fight(enemy):
             write_effect(DAMAGE_REPORT['Opponent_Action']['Description'].replace("(dmg)", str(enemy.atk)), False)
 
         elif action == "2":
-            player.open_inventory()
+            player.display_inventory()
         else:
             write_effect("MEGAKNIGHT CANNOT FOLLOW YOUR COMMAND.", False)
         
@@ -176,7 +176,7 @@ def handle_room_action(room_type):
         player.update_inventory(reward)
         print("\nA new item has been added into your inventory!")
         player.update_equipment(reward)
-        player.open_inventory()
+        player.display_inventory()
     else:
         battle_sequence(room_type)
 
