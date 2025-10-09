@@ -51,12 +51,12 @@ class Player(Entity):
     
     def display_inventory(self):
         """Prints out the current items stored in a player's inventory."""
-        print("Your current items:", self.inventory)
+        print("Your current items:", ", ".join(self.inventory))
         return
     
-    def update_inventory(self, item):
+    def update_inventory(self, item: Item):
         """Updates the current inventory. RIGHT NOW, ONLY ADDS ITEM."""
-        self.inventory.append(item)
+        self.inventory.add(item)
         return
     
     def calculate_atk(self) -> int:
