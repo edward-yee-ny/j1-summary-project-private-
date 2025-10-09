@@ -1,23 +1,18 @@
 # importing
 from environment.map import *
-from objects.item import Item 
 from entities.player import Player
 from environment.boss import BossRoom
 from helper.extract_json import extractJson
 from time import sleep
 import json
-from helper.pack_json import packJson
-from helper import prompt_valid_choice
 
-def open_and_dict(filename):
-    with open(filename, 'r') as f:
-        data = f.read()
-    res = extractJson(data)
-    return res
+from helper import prompt_valid_choice
 
 # Define a global constant for the intro file
 INTRO_FILE = "intro.txt"
 OUTRO_FILE = "outro.txt"
+OPTION_NEW_GAME = "New Game"
+OPTION_LOAD_GAME = "Load Game"
 OPTION_GO_LEFT = "Go Left"
 OPTION_GO_FORWARD = "Go Forward"
 OPTION_GO_RIGHT = "Go Right"
@@ -25,6 +20,10 @@ OPTION_EQUIP_EQUIPMENT = "Equip Equipment"
 OPTION_SAVE_GAME = "Save Game"
 OPTION_ATTACK = "Attack"
 OPTION_OPEN_INVENTORY = "Open Inventory"
+GAME_MENU_OPTIONS = [
+    OPTION_NEW_GAME,
+    OPTION_LOAD_GAME
+]
 MAIN_MENU_OPTIONS = [
     OPTION_GO_LEFT,
     OPTION_GO_FORWARD,
@@ -36,8 +35,8 @@ FIGHT_MENU_OPTIONS = [
     OPTION_ATTACK,
     OPTION_OPEN_INVENTORY
 ]
-BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
-DAMAGE_REPORT = open_and_dict('data/damage_report.json')
+BATTLE_OUTCOMES = extractJson('data/battle_outcome.json')
+DAMAGE_REPORT = extractJson('data/damage_report.json')
 
 def load_textfile(filename):
     """Loads the content of a text file."""
@@ -51,15 +50,10 @@ class Game:
         self.game_over = False
         self.choice = prompt_valid_choice(
             "Welcome to the game, what would you like to do?",
-            {"1": "New Game", "2": "Load Game"},
-            "Key in the number: "
+            GAME_MENU_OPTIONS,
         )
 
     def run(self):
-
-        BATTLE_OUTCOMES = open_and_dict('data/battle_outcome.json')
-        DAMAGE_REPORT = open_and_dict('data/damage_report.json')
-
         print(load_textfile(INTRO_FILE))
         # functions used
         def handle_menu_choice(choice: str):
