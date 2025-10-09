@@ -20,6 +20,9 @@ class Armor(Item):
         self.hp = hp
 
 
+class NotInInventoryError(Exception): ...
+
+
 class Inventory:
     def __init__(self):
         self._contents: dict[str, Item] = {}
@@ -38,7 +41,9 @@ class Inventory:
         return True
 
     def get(self, item_name: str) -> Item:
-        return self._contents.get(item_name)
+        if not self.has(item_name):
+            raise NotInInventoryError
+        return self._contents[item_name]
 
     def has(self, item_name: str) -> bool:
         """Returns True if the item is in inventory."""
